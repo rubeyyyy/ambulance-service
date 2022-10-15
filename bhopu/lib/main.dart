@@ -1,3 +1,4 @@
+
 import 'package:bhopu/screen/login.dart';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ void main() {
     debugShowCheckedModeBanner: false,
     initialRoute: 'login',
     routes: {
-    'login': (context)=>mylogin()},
+    'login': (context)=>MyLogin()},
   ));
 }
 

@@ -1,37 +1,140 @@
 import 'package:flutter/material.dart';
+import 'package:bhopu/screen/passwordPage.dart';
+import 'package:bhopu/screen/registerChoice.dart';
+import 'package:bhopu/screen/Dashboard.dart';
 
-// ignore: camel_case_types
-class mylogin extends StatefulWidget {
-  const mylogin({ Key? key }) : super(key: key);
+class MyLogin extends StatefulWidget {
+  const MyLogin({ Key? key }) : super(key: key);
 
   @override
-  State<mylogin> createState() => _myloginState();
+  State<MyLogin> createState() => _MyLoginState();
 }
 
-// ignore: camel_case_types
-class _myloginState extends State<mylogin> {
+class _MyLoginState extends State<MyLogin> {
+
+  var _formkey = GlobalKey<FormState>();
+  bool _isPasswordHidden = true;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('assets/images/123.JPEG'), fit: BoxFit.cover
+        image: DecorationImage(image: AssetImage('assets/image/123.JPEG'), fit: BoxFit.cover
         )
       ),
-    child:  Scaffold(
+      child:  Scaffold(
       backgroundColor: Colors.transparent,
-      body: Stack(
-        children: [
-          Container(
-            child: Text('login', style: TextStyle(color: Colors.black, fontSize: 40),),
-            padding: EdgeInsets.only(left: 150 ,top: 250),
+
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 250),
+        child: SafeArea(
+          child: Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                TextFormField(
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter your phone or email';
+                    }
+                  },
+                  decoration: InputDecoration(
+                      hintText: 'Enter your phone or email',
+                      labelText: 'Phone or Email',
+                      border: OutlineInputBorder()),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  obscureText: _isPasswordHidden,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Enter the password';
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Enter your password',
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: Icon(_isPasswordHidden
+                          ? Icons.visibility
+                          : Icons.visibility_off),
+                      onPressed: () {
+                        setState(() {
+                          _isPasswordHidden = !_isPasswordHidden;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => passwordPage()));
+                      },
+                      child: Text(
+                        "\nForget Password?",
+                        style: TextStyle(color: Color.fromARGB(255, 30, 140, 190),fontSize: 10),
+                      ),
+                    )
+                  ],
+                ),
+                Center(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (_formkey.currentState!.validate()) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => dashBoard(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Text('Login')),
+                
+                ),
+                SizedBox(
+                  height: 20,
+                  
+                ),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(" Don't have an account?, "),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => registerChoice()));
+                        },
+                        child: Text(
+                          "sign up",
+                          style: TextStyle(color:Color.fromARGB(255, 30, 140, 190)),
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
-          Container(
-            
-          )
-        ],
+        ),
       ),
-      
-    ),
+
+      ),
     );
   }
 }
