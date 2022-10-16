@@ -1,28 +1,100 @@
+import 'package:bhopu/screen/booking.dart';
+import 'package:bhopu/screen/emergency.dart';
 import 'package:flutter/material.dart';
 
-class dashBoard extends StatefulWidget {
-  const dashBoard({Key? key}) : super(key: key);
+class dashboard extends StatefulWidget {
+  const dashboard({ Key? key }) : super(key: key);
 
   @override
-  State<dashBoard> createState() => _dashBoardState();
+  State<dashboard> createState() => _dashboardState();
 }
 
-class _dashBoardState extends State<dashBoard> {
+class _dashboardState extends State<dashboard> {
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     body: SingleChildScrollView(
-       child: SafeArea(
-         child: Column(children: [
-           SizedBox(height: 200,),
-           Center(child: Text('RUBSSS'
-               '',style: TextStyle(fontSize: 40,color: Colors.red,fontWeight: FontWeight.bold),)),
+    return Scaffold(
+      appBar: AppBar(title: Text('Bhopu'),
+      backgroundColor: Color.fromARGB(255, 113, 174, 202),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
 
-
-         ],),
-       ),
-     ),
-
-   );
+    Container(
+       height: 250,
+      width: 370,
+      padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.all(20.0),
+      color: Color.fromARGB(188, 131, 186, 231),
+      child: Stack(
+      children: [
+         Container(
+         child: Text(
+                    'Emergency Service',
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.w300, fontFamily: 'Montserrat', color: Colors.white),
+                  )
+        ),
+         Positioned(
+         bottom: 0,
+         child: TextButton(
+        child: Text(
+          "Profile",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300,color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 214, 126, 115),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                
+                ),
+        onPressed: () {
+          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => emergency()));
+        },
+      ),
+        ),
+      ],
+    ),
+ ),
+ Container(
+       height: 250,
+      width: 370,
+      padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.all(20.0),
+      color: Color.fromARGB(187, 153, 196, 231),
+      child: Stack(
+      children: [
+         Container(
+         child: Text(
+                    'Book an Ambulance',
+                     style: TextStyle(fontSize: 45, fontWeight: FontWeight.w300, fontFamily: 'Montserrat',color: Colors.white),
+                   ),
+        ),
+         Positioned(
+         bottom: 0,
+         child: TextButton(
+        child: Text(
+          "Profile",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300,color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 243, 146, 133),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                
+                ),
+        onPressed: () {
+          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => booking()));
+        },
+      ),
+        ),
+      ],
+    ),
+ ),   
+  ],
+      ),
+    );
   }
 }

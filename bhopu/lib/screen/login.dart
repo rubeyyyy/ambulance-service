@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bhopu/screen/passwordPage.dart';
 import 'package:bhopu/screen/registerChoice.dart';
-import 'package:bhopu/screen/Dashboard.dart';
+import 'package:bhopu/screen/dashboard.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({ Key? key }) : super(key: key);
@@ -19,7 +19,7 @@ class _MyLoginState extends State<MyLogin> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('assets/image/123.JPEG'), fit: BoxFit.cover
+        image: DecorationImage(image: AssetImage('assets/image/1.JPEG'), fit: BoxFit.cover
         )
       ),
       child:  Scaffold(
@@ -96,12 +96,18 @@ class _MyLoginState extends State<MyLogin> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => dashBoard(),
+                              builder: (context) => dashboard(),
                             ),
                           );
                         }
                       },
-                      child: Text('Login')),
+                      
+                      child: Text('Login'),
+                      style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 30, 140, 190),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                textStyle: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold)),),
                 
                 ),
                 SizedBox(

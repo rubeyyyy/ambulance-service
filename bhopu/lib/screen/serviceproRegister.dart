@@ -13,7 +13,13 @@ class _servieproRegisterState extends State<servieproRegister> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/image/b.JPEG'), fit: BoxFit.cover
+        )
+      ),
+      child:  Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Form(
@@ -21,11 +27,14 @@ class _servieproRegisterState extends State<servieproRegister> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 20,
+                ),
                 RichText(
                     text: TextSpan(
-                        text: 'Create your account',
+                        text: 'Service Provider Signup',
                         style: TextStyle(
-                            color: Color.fromARGB(255, 30, 140, 190),
+                            color: Color.fromARGB(255, 0, 8, 12),
                             fontSize: 30,
                             fontWeight: FontWeight.bold))),
                 SizedBox(
@@ -33,7 +42,7 @@ class _servieproRegisterState extends State<servieproRegister> {
                 ),
                 Text(
                   'Please enter your data to create account.',
-                  style: TextStyle(fontSize: 13, color: Color.fromARGB(255, 122, 182, 231)),
+                  style: TextStyle(fontSize: 13, color:Color.fromARGB(255, 0, 8, 12)),
                 ),
                 SizedBox(
                   height: 20,
@@ -195,6 +204,7 @@ class _servieproRegisterState extends State<servieproRegister> {
           ),
         ),
       ),
-    );
+    )
+    ) ;
   }
 }

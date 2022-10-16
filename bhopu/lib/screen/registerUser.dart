@@ -12,7 +12,13 @@ class _registerUserState extends State<registerUser> {
   var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/image/b.JPEG'), fit: BoxFit.cover
+        )
+      ),
+      child:  Scaffold(
+      backgroundColor: Colors.transparent,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Form(
@@ -20,12 +26,15 @@ class _registerUserState extends State<registerUser> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 20,
+                ),
                 RichText(
                     text: TextSpan(
-                        text: 'Create your account',
+                        text: 'User Signup', 
                         style: TextStyle(
-                            color:  Color.fromARGB(255, 30, 140, 190),
-                            fontSize: 30,
+                            color:  Color.fromARGB(255, 0, 8, 12),
+                            fontSize: 30, 
                             fontWeight: FontWeight.bold))),
                 SizedBox(
                   height: 20,
@@ -33,7 +42,7 @@ class _registerUserState extends State<registerUser> {
 
                 Text(
                   'Please enter your data to create account.',
-                  style: TextStyle(fontSize: 13, color: Color.fromARGB(255, 94, 165, 223)),
+                  style: TextStyle(fontSize: 13, color:Color.fromARGB(255, 0, 8, 12)),
                 ),
                 SizedBox(height: 20,),
                 Text('Full Name*'),
@@ -106,6 +115,7 @@ class _registerUserState extends State<registerUser> {
                       "Submit",
                       style: TextStyle(color: Colors.white),
                     ),
+                    
                     onPressed: () {
                       if (_formkey.currentState!.validate()) {
                         Navigator.push(
@@ -149,6 +159,7 @@ class _registerUserState extends State<registerUser> {
           ),
         ),
       ),
+    )
     );
   }
 }
