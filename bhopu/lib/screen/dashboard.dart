@@ -1,4 +1,5 @@
 import 'package:bhopu/screen/booking.dart';
+import 'package:bhopu/screen/cancelBooking.dart';
 import 'package:bhopu/screen/emergency.dart';
 import 'package:flutter/material.dart';
 
@@ -60,7 +61,7 @@ class _dashboardState extends State<dashboard> {
  Container(
        height: 250,
       width: 370,
-      padding: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(15.0),
       margin: EdgeInsets.all(20.0),
       color: Color.fromARGB(187, 153, 196, 231),
       child: Stack(
@@ -72,14 +73,14 @@ class _dashboardState extends State<dashboard> {
                    ),
         ),
          Positioned(
-         bottom: 0,
+         bottom: 20,
          child: TextButton(
         child: Text(
-          "Profile",
+          "Book now",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300,color: Colors.white),
         ),
         style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 243, 146, 133),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                 
                 ),
         onPressed: () {
@@ -87,6 +88,26 @@ class _dashboardState extends State<dashboard> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => booking()));
+        },
+      ),
+        ),
+         Positioned(
+         bottom: 20,
+         right: 0,
+         child: TextButton(
+        child: Text(
+          "Cancel Booking",
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300,color: Colors.white),
+        ),
+        style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 243, 146, 133),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                
+                ),
+        onPressed: () {
+          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => cancelBooking()));
         },
       ),
         ),

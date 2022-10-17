@@ -15,7 +15,7 @@ class _registerChoiceState extends State<registerChoice> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('assets/image/5.jpg'), fit: BoxFit.cover
+        image: DecorationImage(image: AssetImage('assets/image/2.JPEG'), fit: BoxFit.cover
         )
       ),
       child:  Scaffold(
