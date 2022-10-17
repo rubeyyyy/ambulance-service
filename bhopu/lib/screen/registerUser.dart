@@ -1,5 +1,3 @@
-// ignore_for_file: camel_case_types
-
 import 'package:bhopu/screen/login.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +9,7 @@ class registerUser extends StatefulWidget {
 }
 
 class _registerUserState extends State<registerUser> {
-  final _formkey = GlobalKey<FormState>();
+  var _formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,24 +24,21 @@ class _registerUserState extends State<registerUser> {
                     text: TextSpan(
                         text: 'Create your account',
                         style: TextStyle(
-                            color: Color.fromARGB(255, 30, 140, 190),
+                            color:  Color.fromARGB(255, 30, 140, 190),
                             fontSize: 30,
                             fontWeight: FontWeight.bold))),
                 SizedBox(
                   height: 20,
                 ),
+
                 Text(
                   'Please enter your data to create account.',
-                  style: TextStyle(
-                      fontSize: 13, color: Color.fromARGB(255, 94, 165, 223)),
+                  style: TextStyle(fontSize: 13, color: Color.fromARGB(255, 94, 165, 223)),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+                SizedBox(height: 20,),
                 Text('Full Name*'),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
+
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -57,13 +52,10 @@ class _registerUserState extends State<registerUser> {
                       hintText: 'Enter your full name',
                       border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+
+                SizedBox(height: 20,),
                 Text('Phone Number*'),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -74,13 +66,10 @@ class _registerUserState extends State<registerUser> {
                       hintText: 'Enter your phone number',
                       border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+
+                SizedBox(height: 20,),
                 Text('Email*'),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -91,13 +80,10 @@ class _registerUserState extends State<registerUser> {
                       hintText: 'Enter your Email',
                       border: OutlineInputBorder()),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
+
+                SizedBox(height: 20,),
                 Text('Password'),
-                SizedBox(
-                  height: 10,
-                ),
+                SizedBox(height: 10,),
                 TextFormField(
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -112,8 +98,8 @@ class _registerUserState extends State<registerUser> {
                       border: OutlineInputBorder()),
                 ),
                 SizedBox(
-                  height: 20,
-                ),
+                height:20,
+              ),
                 Center(
                   child: ElevatedButton(
                     child: Text(
@@ -125,19 +111,18 @@ class _registerUserState extends State<registerUser> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MyLogin(),
+                            builder: (context) =>MyLogin() ,
                           ),
                         );
                       }
                     },
                     style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 30, 140, 190))),
+                        backgroundColor: MaterialStateProperty.all( Color.fromARGB(255, 30, 140, 190))),
                   ),
                 ),
                 SizedBox(
-                  height: 10,
-                ),
+                height: 10,
+              ),
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -148,12 +133,12 @@ class _registerUserState extends State<registerUser> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MyLogin()));
+                                  builder: (context) =>
+                                      MyLogin()));
                         },
                         child: Text(
                           "Login",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 30, 140, 190)),
+                          style: TextStyle(color:  Color.fromARGB(255, 30, 140, 190)),
                         ),
                       )
                     ],

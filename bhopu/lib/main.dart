@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:bhopu/screen/login.dart';
 
-Future main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+import 'package:flutter/material.dart';
 
+void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     initialRoute: 'login',
-    routes: {'login': (context) => const MyLogin()},
+    routes: {
+    'login': (context)=>MyLogin()},
   ));
 }
+
