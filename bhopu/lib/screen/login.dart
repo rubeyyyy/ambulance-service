@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:bhopu/screen/passwordPage.dart';
 import 'package:bhopu/screen/registerChoice.dart';
 import 'package:bhopu/screen/dashboard.dart';
+import 'package:bhopu/model/order_tracking_page.dart';
 
 class MyLogin extends StatefulWidget {
-  const MyLogin({ Key? key }) : super(key: key);
+  const MyLogin({Key? key}) : super(key: key);
 
   @override
   State<MyLogin> createState() => _MyLoginState();
 }
 
 class _MyLoginState extends State<MyLogin> {
-
   var _formkey = GlobalKey<FormState>();
   bool _isPasswordHidden = true;
 
@@ -19,14 +19,10 @@ class _MyLoginState extends State<MyLogin> {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        image: DecorationImage(image: AssetImage('assets/image/1.JPEG'), fit: BoxFit.cover
-        )
-      ),
-      child:  Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Scaffold(
+          image: DecorationImage(
+              image: AssetImage('assets/image/123.JPEG'), fit: BoxFit.cover)),
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-
         body: SingleChildScrollView(
           padding: EdgeInsets.only(top: 250),
           child: SafeArea(
@@ -35,10 +31,6 @@ class _MyLoginState extends State<MyLogin> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 50,
-                    
-                  ),
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -51,7 +43,7 @@ class _MyLoginState extends State<MyLogin> {
                         border: OutlineInputBorder()),
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 10,
                   ),
                   TextFormField(
                     obscureText: _isPasswordHidden,
@@ -76,7 +68,6 @@ class _MyLoginState extends State<MyLogin> {
                       ),
                     ),
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -88,8 +79,10 @@ class _MyLoginState extends State<MyLogin> {
                                   builder: (context) => passwordPage()));
                         },
                         child: Text(
-                          "\nForget Password?",
-                          style: TextStyle(color: Color.fromARGB(255, 30, 140, 190),fontSize: 10),
+                          "Forget Password?",
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 30, 140, 190),
+                              fontSize: 10),
                         ),
                       )
                     ],
@@ -101,23 +94,16 @@ class _MyLoginState extends State<MyLogin> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => dashboard(),
+                                // builder: (context) => dashBoard(),
+                                builder: (context) => OrderTrackingPage(),
                               ),
                             );
                           }
                         },
-                        
-                        child: Text('Login'),
-                        style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 30, 140, 190),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  textStyle: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold)),),
-                  
+                        child: Text('Login')),
                   ),
                   SizedBox(
                     height: 20,
-                    
                   ),
                   Center(
                     child: Row(
@@ -133,7 +119,8 @@ class _MyLoginState extends State<MyLogin> {
                           },
                           child: Text(
                             "sign up",
-                            style: TextStyle(color:Color.fromARGB(255, 30, 140, 190)),
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 30, 140, 190)),
                           ),
                         )
                       ],
@@ -143,8 +130,6 @@ class _MyLoginState extends State<MyLogin> {
               ),
             ),
           ),
-        ),
-
         ),
       ),
     );
