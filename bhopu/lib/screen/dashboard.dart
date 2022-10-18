@@ -1,6 +1,7 @@
 import 'package:bhopu/screen/booking.dart';
 import 'package:bhopu/screen/cancelBooking.dart';
 import 'package:bhopu/screen/emergency.dart';
+import 'package:bhopu/screen/navbar.dart';
 import 'package:flutter/material.dart';
 
 class dashboard extends StatefulWidget {
@@ -8,6 +9,7 @@ class dashboard extends StatefulWidget {
 
   @override
   State<dashboard> createState() => _dashboardState();
+
 }
 
 class _dashboardState extends State<dashboard> {
@@ -17,6 +19,7 @@ class _dashboardState extends State<dashboard> {
       appBar: AppBar(title: Text('Bhopu'),
       backgroundColor: Color.fromARGB(255, 113, 174, 202),
       ),
+      drawer: NavBar(),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
