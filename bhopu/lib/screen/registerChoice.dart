@@ -13,23 +13,30 @@ class registerChoice extends StatefulWidget {
 class _registerChoiceState extends State<registerChoice> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/image/2.JPEG'), fit: BoxFit.cover
+        )
+      ),
+      child:  Scaffold(
+      backgroundColor: Colors.transparent,
+
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                height: 100,
+                height: 175,
               ),
               Center(
                 child: Text(
                   'Register As',
-                  style: TextStyle(fontSize: 55, color: Color.fromARGB(255, 30, 140, 190)),
+                  style: TextStyle(fontSize: 35,fontWeight: FontWeight.w500, color: Color.fromARGB(255, 113, 174, 202)),
                 ),
               ),
               SizedBox(
-                height: 80,
+                height: 35,
               ),
               ElevatedButton(
                   onPressed: () {
@@ -40,10 +47,16 @@ class _registerChoiceState extends State<registerChoice> {
                   },
                   child: Text(
                     'User',
-                    style: TextStyle(fontSize: 85, color: Colors.white),
-                  )),
+                    style: TextStyle(fontSize: 45,fontWeight: FontWeight.w300, fontFamily: 'Montserrat', color: Colors.white),
+                  ),
+                    style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 214, 126, 115) ,
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold)),
+                  ),
               SizedBox(
-                height: 70,
+                height: 35,
               ),
               ElevatedButton(
                   onPressed: () {
@@ -52,14 +65,24 @@ class _registerChoiceState extends State<registerChoice> {
                         MaterialPageRoute(
                             builder: (context) => servieproRegister()));
                   },
+                 
                   child: Text(
                     'Service \nProvider',
-                    style: TextStyle(fontSize: 70, color: Colors.white),
-                  ))
+                    style: TextStyle(fontSize: 40,fontWeight: FontWeight.w300, fontFamily: 'Montserrat', color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(primary: Color.fromARGB(188, 131, 186, 231),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold)),
+
+                  )
+                  
             ],
           ),
         ),
       ),
+    )
     );
   }
 }
