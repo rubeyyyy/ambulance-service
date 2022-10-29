@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:bhopu/screen/passwordPage.dart';
 import 'package:bhopu/screen/registerChoice.dart';
-import 'package:bhopu/screen/dashboard.dart';
+import 'package:bhopu/screen/serviceDashboard.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({ Key? key }) : super(key: key);
@@ -101,7 +101,7 @@ class _MyLoginState extends State<MyLogin> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => dashboard(),
+                                builder: (context) => serviceDashboard(),
                               ),
                             );
                           }

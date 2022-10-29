@@ -1,4 +1,5 @@
 
+import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/login.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +27,9 @@ void selectedItem(BuildContext context, int index){
       //   ),);
         break;
     case 3:
-      // Navigator.of(context).push(MaterialPageRoute(
-      //   builder: (context)=> MyLogin(),
-      //   ),);
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context)=> complaints(),
+        ),);
         break;
     case 4:
       Navigator.of(context).push(MaterialPageRoute(

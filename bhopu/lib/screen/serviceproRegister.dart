@@ -10,6 +10,7 @@ class servieproRegister extends StatefulWidget {
 
 class _servieproRegisterState extends State<servieproRegister> {
   var _formkey = GlobalKey<FormState>();
+  String dropdownvalue = 'Equipped';
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +166,9 @@ class _servieproRegisterState extends State<servieproRegister> {
                   SizedBox(
                     height: 10,
                   ),
+                  
                   DropdownButton<String>(
+                    value: dropdownvalue,
                     items:
                         <String>['Equipped', 'Non Equipped'].map((String value) {
                       return DropdownMenuItem<String>(
@@ -173,7 +176,9 @@ class _servieproRegisterState extends State<servieproRegister> {
                         child: Text(value),
                       );
                     }).toList(),
-                    onChanged: (_) {},
+                    onChanged: (String? newValue) {setState(() {
+                  dropdownvalue = newValue!;
+                });},
                   ),
                   SizedBox(
                     height: 20,
