@@ -1,7 +1,15 @@
 // ignore_for_file: camel_case_types
 
+import 'package:bhopu/model/user_model.dart';
+import 'package:bhopu/screen/dashboard.dart';
+import 'package:bhopu/screen/verify_email.dart';
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/verify_email.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class registerUser extends StatefulWidget {
   const registerUser({Key? key}) : super(key: key);
@@ -11,7 +19,19 @@ class registerUser extends StatefulWidget {
 }
 
 class _registerUserState extends State<registerUser> {
+  final _auth = FirebaseAuth.instance;
   final _formkey = GlobalKey<FormState>();
+  final bool _isPasswordHidden = true;
+
+  // string for displaying the error Message
+  String? errorMessage;
+
+  final nameEditingController = TextEditingController();
+  final phonenumEditingController = TextEditingController();
+  final emailEditingController = TextEditingController();
+  final passwordEditingController = TextEditingController();
+  final confirmPasswordEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,158 +49,214 @@ class _registerUserState extends State<registerUser> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       RichText(
-                          text: TextSpan(
+                          text: const TextSpan(
                               text: 'User Signup',
                               style: TextStyle(
                                   color: Color.fromARGB(255, 0, 8, 12),
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold))),
-                      SizedBox(
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text(
+                      const Text(
                         'Please enter your data to create account.',
                         style: TextStyle(
                             fontSize: 13, color: Color.fromARGB(255, 0, 8, 12)),
                       ),
-                      SizedBox(
+
+                      //name
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Full Name*'),
-                      SizedBox(
+                      const Text('Full Name*'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        controller: nameEditingController,
+                        keyboardType: TextInputType.name,
                         validator: (value) {
+                          RegExp regex = RegExp(r'^.{3,}$');
+
                           if (value!.isEmpty) {
-                            return 'Enter your Name';
+                            return ("Enter your Name");
                           }
                           if (value.split(" ").length == 1) {
                             return 'Enter your full name';
                           }
+                          if (!regex.hasMatch(value)) {
+                            return ("Enter Valid name(Min. 3 Character)");
+                          }
+                          return null;
                         },
-                        decoration: InputDecoration(
+                        onSaved: (value) {
+                          nameEditingController.text = value!;
+                        },
+                        decoration: const InputDecoration(
                             hintText: 'Enter your full name',
                             border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+
+                      //phone number
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Phone Number*'),
-                      SizedBox(
+                      const Text('Phone Number*'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        controller: phonenumEditingController,
+                        keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Enter your Mobile';
                           }
                         },
-                        decoration: InputDecoration(
+                        onSaved: (value) {
+                          phonenumEditingController.text = value!;
+                        },
+                        decoration: const InputDecoration(
                             hintText: 'Enter your phone number',
                             border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+
+                      //email
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Email*'),
-                      SizedBox(
+                      const Text('Email*'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        controller: emailEditingController,
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Enter your Email';
+                            return ("Please Enter Your Email");
                           }
+
+                          // reg expression for email validation
+                          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
+                              .hasMatch(value)) {
+                            return ("Please Enter a valid email");
+                          }
+                          return null;
                         },
-                        decoration: InputDecoration(
+                        onSaved: (value) {
+                          emailEditingController.text = value!;
+                        },
+                        decoration: const InputDecoration(
                             hintText: 'Enter your Email',
                             border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+
+                      //password
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Password'),
-                      SizedBox(
+                      const Text('Password'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        controller: passwordEditingController,
+                        obscureText: _isPasswordHidden,
                         validator: (value) {
+                          RegExp regex = RegExp(r'^.{6,}$');
                           if (value!.isEmpty) {
-                            return 'password cannot be left empty';
+                            return ("Password is required for login");
                           }
-                          if (value.length < 6) {
-                            return 'Password must contains 6 charcters';
+                          if (!regex.hasMatch(value)) {
+                            return ("Enter Valid Password(Min. 6 Character)");
                           }
                         },
-                        decoration: InputDecoration(
-                            hintText: 'Enter your password',
-                            border: OutlineInputBorder()),
+                        onSaved: (value) {
+                          passwordEditingController.text = value!;
+                        },
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.vpn_key),
+                          hintText: 'Enter your password',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
-                      SizedBox(
+
+                      //confirm password
+
+                      const SizedBox(
                         height: 20,
                       ),
-                      Text('Re-enter Password'),
-                      SizedBox(
+                      const Text('Re-enter Password'),
+                      const SizedBox(
                         height: 10,
                       ),
                       TextFormField(
+                        controller: confirmPasswordEditingController,
+                        obscureText: true,
                         validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'password cannot be left empty';
+                          if (confirmPasswordEditingController.text !=
+                              passwordEditingController.text) {
+                            return "Password don't match";
                           }
-                          if (value.length < 6) {
-                            return 'Password must contains 6 charcters';
-                          }
+                          return null;
                         },
-                        decoration: InputDecoration(
+                        onSaved: (value) {
+                          confirmPasswordEditingController.text = value!;
+                        },
+                        decoration: const InputDecoration(
                             hintText: 'Re-enter your password',
                             border: OutlineInputBorder()),
                       ),
-                      SizedBox(
+
+                      //submit button
+
+                      const SizedBox(
                         height: 20,
                       ),
                       Center(
                         child: ElevatedButton(
-                          child: Text(
+                          child: const Text(
                             "Submit",
                             style: TextStyle(color: Colors.white),
                           ),
                           onPressed: () {
-                            if (_formkey.currentState!.validate()) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyLogin(),
-                                ),
-                              );
-                            }
+                            signUp(emailEditingController.text,
+                                passwordEditingController.text);
+                            //VerifyMail(emailEditingController.text);
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
-                                  Color.fromARGB(255, 30, 140, 190))),
+                                  const Color.fromARGB(255, 30, 140, 190))),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
+
+                      //already have account
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Already have an account, "),
+                            const Text("Already have an account, "),
                             GestureDetector(
                               onTap: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => MyLogin()));
+                                        builder: (context) => const MyLogin()));
                               },
-                              child: Text(
+                              child: const Text(
                                 "Login",
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 30, 140, 190)),
@@ -196,5 +272,69 @@ class _registerUserState extends State<registerUser> {
             ),
           ),
         ));
+  }
+
+  void signUp(String email, String password) async {
+    if (_formkey.currentState!.validate()) {
+      try {
+        await _auth
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) => {postDetailsToFirestore()})
+            .catchError((e) async {
+          Fluttertoast.showToast(msg: e!.message);
+        });
+      } on FirebaseAuthException catch (error) {
+        switch (error.code) {
+          case "invalid-email":
+            errorMessage = "Your email address appears to be malformed.";
+            break;
+          case "wrong-password":
+            errorMessage = "Your password is wrong.";
+            break;
+          case "user-not-found":
+            errorMessage = "User with this email doesn't exist.";
+            break;
+          case "user-disabled":
+            errorMessage = "User with this email has been disabled.";
+            break;
+          case "too-many-requests":
+            errorMessage = "Too many requests";
+            break;
+          case "operation-not-allowed":
+            errorMessage = "Signing in with Email and Password is not enabled.";
+            break;
+          default:
+            errorMessage = "An undefined Error happened.";
+        }
+        Fluttertoast.showToast(msg: errorMessage!);
+        print(error.code);
+      }
+    }
+  }
+
+  postDetailsToFirestore() async {
+    // calling our firestore
+    // calling our user model
+    // sedning these values
+
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
+
+    UserModel userModel = UserModel();
+
+    // writing all the values
+    userModel.email = user!.email;
+    userModel.uid = user.uid;
+    userModel.name = nameEditingController.text;
+    userModel.phonenum = phonenumEditingController.text;
+
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+    Fluttertoast.showToast(msg: "waiting for email verification :) ");
+
+    Navigator.pushAndRemoveUntil((context),
+        MaterialPageRoute(builder: (context) => dashboard()), (route) => false);
   }
 }

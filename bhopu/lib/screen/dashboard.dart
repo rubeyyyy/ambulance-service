@@ -1,6 +1,8 @@
+// ignore_for_file: camel_case_types
+
+import 'package:bhopu/model/order_tracking_page.dart';
 import 'package:bhopu/screen/booking.dart';
 import 'package:bhopu/screen/cancelBooking.dart';
-import 'package:bhopu/screen/emergency.dart';
 import 'package:flutter/material.dart';
 
 class dashboard extends StatefulWidget {
@@ -55,8 +57,10 @@ class _dashboardState extends State<dashboard> {
                           EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     ),
                     onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => emergency()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrderTrackingPage()));
                     },
                   ),
                 ),
