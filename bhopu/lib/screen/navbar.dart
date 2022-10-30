@@ -1,5 +1,6 @@
 
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/ratingBar.dart';
 import 'package:flutter/material.dart';
 
 
@@ -27,12 +28,17 @@ void selectedItem(BuildContext context, int index){
         break;
     case 3:
       // Navigator.of(context).push(MaterialPageRoute(
-      //   builder: (context)=> MyLogin(),
+      //   builder: (context)=> RatingBarScreen(),
       //   ),);
         break;
     case 4:
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context)=> MyLogin(),
+        ),);
+        break;
+    case 5:
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context)=> RatingBarScreen(),
         ),);
         break;
   }
@@ -94,6 +100,11 @@ void selectedItem(BuildContext context, int index){
           leading:const Icon(Icons.exit_to_app),
           title: const Text('Logout'),
           onTap: ()=> selectedItem(context ,4),
+        ),
+        ListTile(
+          leading:const Icon(Icons.exit_to_app),
+          title: const Text('Review and Rating'),
+          onTap: ()=> selectedItem(context ,5),
         ),
       ],
     ),
