@@ -45,7 +45,7 @@ class _complaintsState extends State<complaints> {
                   ),
                   Text('Full Name*'),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                     validator: (value) {
@@ -65,7 +65,7 @@ class _complaintsState extends State<complaints> {
                   ),
                   Text('Phone Number*'),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                     validator: (value) {
@@ -82,7 +82,7 @@ class _complaintsState extends State<complaints> {
                   ),
                   Text('Complain Against'),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   
                   DropdownButton<String>(
@@ -102,9 +102,21 @@ class _complaintsState extends State<complaints> {
                 SizedBox(
                     height: 20,
                   ),
+                   Text('Complain Against ambulance number (if any)'),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  TextFormField(   
+                    decoration: InputDecoration(
+                        hintText: 'Enter your Ambulance number',
+                        border: OutlineInputBorder()),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text('Write down Your Problem*'),
                   SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   TextFormField(
                     validator: (value) {
@@ -113,10 +125,10 @@ class _complaintsState extends State<complaints> {
                       }
                       
                     },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder()
+                    // decoration: InputDecoration(
+                    //     border: OutlineInputBorder()
                       
-                        ),
+                    //     ),
                   ),
                   SizedBox(
                     height: 20,
