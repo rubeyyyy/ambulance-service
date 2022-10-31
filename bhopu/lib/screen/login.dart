@@ -1,3 +1,4 @@
+import 'package:bhopu/screen/serviceDashboard.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bhopu/screen/passwordPage.dart';
@@ -194,7 +195,7 @@ class _MyLoginState extends State<MyLogin> {
             .then((uid) => {
                   Fluttertoast.showToast(msg: "Login Successful"),
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => dashboard())),
+                      MaterialPageRoute(builder: (context) => serviceDashboard())),
                 });
       } on FirebaseAuthException catch (error) {
         switch (error.code) {

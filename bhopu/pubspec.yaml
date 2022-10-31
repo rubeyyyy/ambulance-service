@@ -42,11 +42,14 @@ dependencies:
   firebase_auth: ^3.11.2
   firebase_core: ^1.24.0
   fluttertoast: ^8.1.1
+  flutter_google_places: ^0.3.0
+  geolocator:  ^7.1.0
+  geocoding: ^2.0.0
  
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
