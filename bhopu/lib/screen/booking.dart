@@ -10,9 +10,20 @@ class booking extends StatefulWidget {
 }
 
 class _bookingState extends State<booking> {
+
    var _formkey = GlobalKey<FormState>();
    DateTime selectedDate = DateTime.now();
-    
+   String? selectedTime;
+
+  Future<void> _displayTimeDialog(BuildContext context) async {
+    final TimeOfDay? time =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    if (time != null) {
+      setState(() {
+        selectedTime = time.format(context);
+      });
+    }
+    }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -26,8 +37,8 @@ class _bookingState extends State<booking> {
       });
     }
     
+    
   }
-
 
 
   @override
@@ -49,12 +60,11 @@ class _bookingState extends State<booking> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
-                
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 20,
-                  ),
+                   ),
                   RichText(
                       text: TextSpan(
                           text: 'Enter Booking details',
@@ -66,13 +76,12 @@ class _bookingState extends State<booking> {
                     height: 20,
                   ),
                   
-                  SizedBox(
-                    height: 20,
-                  ),
                   Text('Name of patient*'),
+
                   SizedBox(
                     height: 10,
                   ),
+
                   TextFormField(
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -145,48 +154,90 @@ class _bookingState extends State<booking> {
                   SizedBox(
                     height: 10,
                   ),
-Container(
-      decoration: BoxDecoration(
-      border: Border.all(
-          color: Color.fromARGB(255, 109, 102, 102), //color of border
-          width: 0.5, //width of border
-        ),
-      borderRadius: BorderRadius.circular(5)
-    ),
-      height: 60,
-      width: 500,
-      
-      child: Stack(
-      children: [
-         Container(
-padding: EdgeInsets.all(15.0),
-         child: Text("${selectedDate.toLocal()}".split(' ')[0]),
-        ),
-         Positioned(
-         bottom: 7,
-         right: 10,
-         child: ElevatedButton(
-          
-              onPressed: () => _selectDate(context),
-              child: Text('Select date'),
-              
-            ),
-        ),
-        
-      ],
-    ),
- ),
-
-SizedBox(
-                    height: 20,
+              Container(
+                    decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Color.fromARGB(255, 109, 102, 102), //color of border
+                        width: 0.5, //width of border
+                      ),
+                    borderRadius: BorderRadius.circular(5)
                   ),
-                  
-                  Text('Time'),
-                  SizedBox(
-                    height: 10,
+                    height: 60,
+                    width: 500,
+                    
+                    child: Stack(
+                    children: [
+                      Container(
+              padding: EdgeInsets.all(15.0),
+                      child: Text("${selectedDate.toLocal()}".split(' ')[0]),
+                      ),
+                      Positioned(
+                      bottom: 7,
+                      right: 10,
+                      child: ElevatedButton(
+                        
+                            onPressed: () => _selectDate(context),
+                            child: Text('Select date'),
+                            style: ButtonStyle(
+                                        backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                          ),
+                      ),
+                      
+                    ],
                   ),
+              ),
 
+                SizedBox(
+                     height: 20,
+                    ),
+                                  
+                                  Text('Time'),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
 
+                Container(
+                      decoration: BoxDecoration(
+                      border: Border.all(
+                          color: Color.fromARGB(255, 109, 102, 102), //color of border
+                          width: 0.5, //width of border
+                        ),
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                      height: 60,
+                      width: 500,
+                      
+                      child: Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(15.0),
+                        child: Text(
+                            selectedTime != null
+                                ? '$selectedTime'
+                                : 'Select time',
+                            
+                          ),
+                        ),
+                        Positioned(
+                        bottom: 7,
+                        right: 10,
+                        child: ElevatedButton(
+                          
+                            onPressed: () => _displayTimeDialog(context),
+                              child: Text('Select Time'),
+                              style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                            ),
+                        ),
+                        
+                      ],
+                    ),
+                ),
+
+                SizedBox(
+                     height: 20,
+                    ),
+                       
 
                   Center(
                     child: ElevatedButton(

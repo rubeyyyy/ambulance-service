@@ -1,4 +1,5 @@
 
+import 'package:bhopu/screen/ambulanceList.dart';
 import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/login.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +23,9 @@ void selectedItem(BuildContext context, int index){
       //   ),);
         break;
     case 2:
-      // //Navigator.of(context).push(MaterialPageRoute(
-      //   builder: (context)=> login(),
-      //   ),);
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (context)=> ambulanceList(),
+        ),);
         break;
     case 3:
       Navigator.of(context).push(MaterialPageRoute(
