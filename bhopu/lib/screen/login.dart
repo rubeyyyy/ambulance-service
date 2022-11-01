@@ -195,8 +195,9 @@ class _MyLoginState extends State<MyLogin> {
             .then((uid) => {
                   Fluttertoast.showToast(msg: "Login Successful"),
                   Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => serviceDashboard())),
-                });
+                      MaterialPageRoute(builder: (context) => dashboard())),
+                }
+                );
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":

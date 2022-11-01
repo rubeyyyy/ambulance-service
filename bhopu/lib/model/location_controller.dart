@@ -2,7 +2,6 @@
 // import 'package:get/get.dart';
 // import 'dart:convert';
 // import 'dart:io';
-
 // import 'package:flutter/cupertino.dart';
 // import 'package:geocoding/geocoding.dart';
 // import 'package:geolocator/geolocator.dart';

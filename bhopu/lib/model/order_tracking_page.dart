@@ -2,7 +2,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:location/location.dart' as loc;
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_webservice/places.dart';
 
 const String google_api_key = "AIzaSyASWWy9gVLxU-J4sxZavRQ_nsFqFDVMDI8";
 
@@ -15,17 +19,18 @@ class OrderTrackingPage extends StatefulWidget {
 
 class OrderTrackingPageState extends State<OrderTrackingPage> {
   final Completer<GoogleMapController> _controller = Completer();
-
+String googleApikey = "AIzaSyASWWy9gVLxU-J4sxZavRQ_nsFqFDVMDI8";
+  GoogleMapController? mapController;
   static const LatLng sourceLocation = LatLng(28.394857, 84.124008);
   static const LatLng destination = LatLng(28.237987, 83.995588);
   static const double _defaultLat = 8.85577417427599;
   static const double _defaultLng = 38.85577417427599;
   static const CameraPosition _defaultLocation = CameraPosition(target: LatLng(_defaultLat,_defaultLng),zoom: 15);
 
-  LocationData? currentLocation;
+  loc.LocationData? currentLocation;
 
   void getCurrentLocation() {
-    Location location = Location();
+    loc.Location location = loc.Location();
 
     location.getLocation().then(
         (location){
@@ -57,10 +62,15 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
   void initState() {
       getCurrentLocation();
   }
+  String location = "Search Location"; 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar( 
+             title: Text("Place Search Autocomplete Google Map"),
+             backgroundColor: Colors.deepPurpleAccent,
+          ),
       // body: GoogleMap(
       //   initialCameraPosition:CameraPosition (
       //             target: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
@@ -85,10 +95,7 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
       //     _controller.complete(mapController);
       //   },
       // ),
-      appBar: AppBar(
-          title: const Text('Google Map'),
-          centerTitle: true,
-        ), // AppBar
+      // AppBar
         body: Stack(
           children: <Widget>[
             currentLocation == null ? const Center(child: Text("Loading")) :
@@ -115,7 +122,64 @@ class OrderTrackingPageState extends State<OrderTrackingPage> {
                   )
                 ],
               ), // Column
-            ), // Container
+            ), 
+            Positioned(  //search input bar
+               top:10,
+               child: InkWell(
+                 onTap: () async {
+                  var place = await PlacesAutocomplete.show(
+                          context: context,
+                          apiKey: googleApikey,
+                          mode: Mode.overlay,
+                          types: [],
+                          strictbounds: false,
+                          components: [Component(Component.country, 'np')],
+                                      //google_map_webservice package
+                          onError: (err){
+                             print(err);
+                          }
+                      );
+
+                   if(place != null){
+                        setState(() {
+                          location = place.description.toString();
+                        });
+
+                       //form google_maps_webservice package
+                       final plist = GoogleMapsPlaces(apiKey:googleApikey,
+                              apiHeaders: await GoogleApiHeaders().getHeaders(),
+                                        //from google_api_headers package
+                        );
+                        String placeid = place.placeId ?? "0";
+                        final detail = await plist.getDetailsByPlaceId(placeid);
+                        final geometry = detail.result.geometry!;
+                        final lat = geometry.location.lat;
+                        final lang = geometry.location.lng;
+                        var newlatlang = LatLng(lat, lang);
+                        
+
+                        //move map camera to selected place with animation
+                        mapController?.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(target: newlatlang, zoom: 17)));
+                   }
+                 },
+                 child:Padding(
+                   padding: EdgeInsets.all(15),
+                    child: Card(
+                       child: Container(
+                         padding: EdgeInsets.all(0),
+                         width: MediaQuery.of(context).size.width - 40,
+                         child: ListTile(
+                            title:Text(location, style: TextStyle(fontSize: 18),),
+                            trailing: Icon(Icons.search),
+                            dense: true,
+                         )
+                       ),
+                    ),
+                 )
+               )
+             )
+
+// Container
           ], // <Widget>[]]
         ),
     );
