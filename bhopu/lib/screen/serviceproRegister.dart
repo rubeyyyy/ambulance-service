@@ -3,12 +3,11 @@
 import 'package:bhopu/model/servicepro_model.dart';
 import 'package:bhopu/screen/dashboard.dart';
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/serviceDashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/number_symbols_data.dart';
 
 class servieproRegister extends StatefulWidget {
   const servieproRegister({Key? key}) : super(key: key);
@@ -31,6 +30,8 @@ class _servieproRegisterState extends State<servieproRegister> {
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
   final ambnumEditingController = TextEditingController();
+
+  String dropdownvalue = 'Equipped';
 
   @override
   Widget build(BuildContext context) {
@@ -356,24 +357,26 @@ class _servieproRegisterState extends State<servieproRegister> {
     // sedning these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
+    User? serviceuser = _auth.currentUser;
 
-    ServiceModel userModel = ServiceModel();
+    ServiceModel serviceModel = ServiceModel();
 
     // writing all the values
-    userModel.email = user!.email;
-    userModel.uid = user.uid;
-    userModel.name = nameEditingController.text;
-    userModel.phonenum = phonenumEditingController.text;
-    userModel.Ambnum = ambnumEditingController.text;
+    serviceModel.email = serviceuser!.email;
+    serviceModel.uid = serviceuser.uid;
+    serviceModel.name = nameEditingController.text;
+    serviceModel.phonenum = phonenumEditingController.text;
+    serviceModel.Ambnum = ambnumEditingController.text;
 
     await firebaseFirestore
-        .collection("users")
-        .doc(user.uid)
-        .set(userModel.toMap());
+        .collection("service providers")
+        .doc(serviceuser.uid)
+        .set(serviceModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
 
-    Navigator.pushAndRemoveUntil((context),
-        MaterialPageRoute(builder: (context) => dashboard()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(builder: (context) => const serviceDashboard()),
+        (route) => false);
   }
 }

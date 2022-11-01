@@ -2,7 +2,7 @@
 
 import 'package:bhopu/model/user_model.dart';
 import 'package:bhopu/screen/dashboard.dart';
-import 'package:bhopu/screen/verify_email.dart';
+
 import 'package:bhopu/screen/login.dart';
 import 'package:bhopu/screen/verify_email.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -232,7 +232,6 @@ class _registerUserState extends State<registerUser> {
                           onPressed: () {
                             signUp(emailEditingController.text,
                                 passwordEditingController.text);
-                            //VerifyMail(emailEditingController.text);
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(

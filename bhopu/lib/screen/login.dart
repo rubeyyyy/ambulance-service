@@ -1,11 +1,16 @@
+import 'package:bhopu/screen/dashboard.dart';
+import 'package:bhopu/screen/serviceDashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bhopu/screen/passwordPage.dart';
 import 'package:bhopu/screen/registerChoice.dart';
-import 'package:bhopu/screen/dashboard.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:bhopu/model/servicepro_model.dart';
+import 'package:bhopu/model/user_model.dart';
 
 class MyLogin extends StatefulWidget {
   const MyLogin({Key? key}) : super(key: key);
@@ -20,6 +25,8 @@ class _MyLoginState extends State<MyLogin> {
 
   //firebase
   final _auth = FirebaseAuth.instance;
+  UserModel loggedInUser = UserModel();
+  ServiceModel loggedInDriver = ServiceModel();
 
   // editing controller
   final TextEditingController emailController = TextEditingController();
@@ -189,13 +196,30 @@ class _MyLoginState extends State<MyLogin> {
   void signIn(String email, String password) async {
     if (_formkey.currentState!.validate()) {
       try {
-        await _auth
-            .signInWithEmailAndPassword(email: email, password: password)
-            .then((uid) => {
-                  Fluttertoast.showToast(msg: "Login Successful"),
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (context) => dashboard())),
-                });
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        // .then((uid) => {
+        Fluttertoast.showToast(msg: "Login Successful");
+        print(_auth.currentUser!.uid);
+        print('#############################S');
+
+        //if(_auth.currentUser!.uid)
+        FirebaseFirestore.instance
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .get()
+            .then((uid) {
+          if (uid.exists) {
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const dashboard()));
+          } else {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(
+                builder: (context) => const serviceDashboard()));
+          }
+        }).onError((error, stackTrace) {}
+                // Navigator.of(context).pushReplacement(
+                //     MaterialPageRoute(builder: (context) => dashboard())),
+                );
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
