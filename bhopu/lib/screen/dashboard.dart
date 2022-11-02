@@ -3,6 +3,7 @@ import 'package:bhopu/screen/cancelBooking.dart';
 import 'package:bhopu/screen/emergency.dart';
 import 'package:bhopu/screen/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 class dashboard extends StatefulWidget {
   const dashboard({ Key? key }) : super(key: key);
@@ -56,6 +57,21 @@ class _dashboardState extends State<dashboard> {
                         MaterialPageRoute(
                             builder: (context) => emergency()));
         },
+      ),
+        ),
+
+        Positioned(
+         bottom: 1,
+         right: 0, 
+         child: ElevatedButton(
+
+        onPressed: callNumber,
+        child: Text('SOS',style: TextStyle(fontSize: 25, fontWeight: FontWeight.w300,color: Colors.white),),
+         style: ElevatedButton.styleFrom(primary: Color.fromARGB(255, 255, 5, 5),
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                fixedSize: const Size(80, 80),
+              shape: const CircleBorder(),
+                ),
       ),
         ),
       ],
@@ -121,4 +137,9 @@ class _dashboardState extends State<dashboard> {
       ),
     );
   }
+}
+
+callNumber() async{
+  const number = '9843815802'; 
+  bool? call = await FlutterPhoneDirectCaller.callNumber(number);
 }
