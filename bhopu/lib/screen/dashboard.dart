@@ -1,5 +1,5 @@
-import 'package:bhopu/model/order_tracking_page.dart';
-import 'package:bhopu/screen/booking.dart';
+import 'package:bhopu/model/emergency.dart';
+import 'package:bhopu/screen/ambulanceUser.dart';
 import 'package:bhopu/screen/cancelBooking.dart';
 import 'package:bhopu/screen/navbar.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,7 @@ class _dashboardState extends State<dashboard> {
           Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => booking()));
+                            builder: (context) => ambulanceUser()));
         },
       ),
         ),
