@@ -1,6 +1,6 @@
 // ignore_for_file: camel_case_types
 
-import 'package:bhopu/model/order_tracking_page.dart';
+import 'package:bhopu/model/emergency.dart';
 import 'package:bhopu/screen/booking.dart';
 import 'package:bhopu/screen/cancelBooking.dart';
 import 'package:bhopu/screen/navbar.dart';
@@ -64,7 +64,7 @@ class _dashboardState extends State<dashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => OrderTrackingPage()));
+                              builder: (context) => emergency()));
                     },
                   ),
                 ),

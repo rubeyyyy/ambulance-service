@@ -10,14 +10,14 @@ import 'package:google_maps_webservice/places.dart';
 
 const String google_api_key = "AIzaSyASWWy9gVLxU-J4sxZavRQ_nsFqFDVMDI8";
 
-class OrderTrackingPage extends StatefulWidget {
-  const OrderTrackingPage({Key? key}) : super(key: key);
+class emergency extends StatefulWidget {
+  const emergency({Key? key}) : super(key: key);
 
   @override
-  State<OrderTrackingPage> createState() => OrderTrackingPageState();
+  State<emergency> createState() => emergencyState();
 }
 
-class OrderTrackingPageState extends State<OrderTrackingPage> {
+class emergencyState extends State<emergency> {
   final Completer<GoogleMapController> _controller = Completer();
 String googleApikey = "AIzaSyASWWy9gVLxU-J4sxZavRQ_nsFqFDVMDI8";
   GoogleMapController? mapController;

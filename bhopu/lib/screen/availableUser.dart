@@ -1,5 +1,5 @@
 import 'dart:developer';
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:bhopu/model/servicepro_model.dart';
 import 'package:bhopu/model/user_model.dart';
@@ -74,7 +74,7 @@ class ambulanceUserState extends State<ambulanceUser> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:CrossAxisAlignment.start,
                                     children: [
                                       //photo
@@ -101,16 +101,21 @@ class ambulanceUserState extends State<ambulanceUser> {
                           "Book",
                           style: TextStyle(color: Colors.white),
                         ),
-                        onPressed: () {
+                        onPressed: () => showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
                           
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ambulanceUser(),
-                              ),
-                            );
-      
-                        },
+                          content: const Text('ou will be informed shortly after'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                              style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                            ),
+                          ],
+                        ),
+                      ),
                         style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
                       ),
