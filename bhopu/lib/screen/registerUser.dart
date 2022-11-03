@@ -2,8 +2,9 @@
 
 import 'package:bhopu/model/user_model.dart';
 import 'package:bhopu/screen/dashboard.dart';
-import 'package:bhopu/screen/verify_email.dart';
+
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/verify_email.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -231,7 +232,7 @@ class _registerUserState extends State<registerUser> {
                           onPressed: () {
                             signUp(emailEditingController.text,
                                 passwordEditingController.text);
-                            //VerifyMail(emailEditingController.text);
+                                VerifyMail(emailEditingController.text);
                           },
                           style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all(
@@ -331,9 +332,9 @@ class _registerUserState extends State<registerUser> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "waiting for email verification :) ");
+    Fluttertoast.showToast(msg: "Verify your email and login :) ");
 
     Navigator.pushAndRemoveUntil((context),
-        MaterialPageRoute(builder: (context) => dashboard()), (route) => false);
+        MaterialPageRoute(builder: (context) =>  VerifyMail(emailEditingController.text)), (route) => false);
   }
 }

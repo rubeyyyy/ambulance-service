@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:bhopu/screen/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bhopu/screen/dashboard.dart';
@@ -91,7 +92,56 @@ class _VerifyMailPageState extends State<VerifyMail> {
                     )),
                 TextButton(
                     onPressed: () => FirebaseAuth.instance.signOut(),
-                    child: const Text('Cancel'))
+                    child: const Text('Cancel')),
+
+                   const SizedBox(height: 24),
+                   ElevatedButton(onPressed:() {
+                    if(isEmailVerified==true){
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          
+                          content: const Text('Your email has been verified. Return to login page'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                              style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                            ),
+                          ],
+                        )
+                       );
+                      Navigator.pushAndRemoveUntil(
+                       (context),
+                       MaterialPageRoute(builder: (context) => const MyLogin()),
+                        (route) => false);
+
+                    }
+                    else{
+                       showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          
+                          content: const Text('PLEASE VERIFY YOUR EMAIL'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text('OK'),
+                              style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                            ),
+                          ],
+                        )
+                       );
+
+                    }
+                   }
+
+                    , child: const Text('return to login page'))
+
+                
+   
               ],
             ),
           ),
