@@ -257,7 +257,6 @@ class _bookingState extends State<booking> {
                               style: TextStyle(color: Colors.white),
                             ),
                             onPressed: () {
-                              print('*************PRESSED');
                               FirebaseFirestore.instance
                                   .collection('service providers')
                                   .doc(widget.userid)
@@ -285,14 +284,37 @@ class _bookingState extends State<booking> {
                                   'Date': selectedDate,
                                   'Time': selectedTime,
                                   'ServiceProviderId': widget.userid
-                                }).then((value) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const dashboard()));
                                 });
+                                //.then((value) {
+                                //   Navigator.push(
+                                //       context,
+                                //       MaterialPageRoute(
+                                //           builder: (context) =>
+                                //               const dashboard()));
+                                // });
                               });
+                              showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          
+                          content: const Text('You will be informed shortly after'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>dashboard(),
+                                            ),
+                                          );
+                                        },
+                              child: Text('OK', style: TextStyle(color: Colors.white),),
+                              style: ButtonStyle(
+                                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
+                            ),
+                          ],
+                        ),
+                      );
                             }),
                       ),
                     ],

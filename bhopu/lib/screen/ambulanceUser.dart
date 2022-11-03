@@ -1,12 +1,9 @@
 import 'dart:developer';
 import 'dart:ffi';
 
-import 'package:bhopu/model/servicepro_model.dart';
-import 'package:bhopu/model/user_model.dart';
-import 'package:bhopu/screen/navbar.dart';
+import 'package:bhopu/screen/booking.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 
 class ambulanceUser extends StatefulWidget {
   late String title;
@@ -29,7 +26,10 @@ class ambulanceUserState extends State<ambulanceUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        title: Text('Bhopu'),
+        backgroundColor: Color.fromARGB(255, 113, 174, 202),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
             child: Container(
@@ -48,12 +48,12 @@ class ambulanceUserState extends State<ambulanceUser> {
                     if (snapshot.hasError) {
                       return Center(child: Text(snapshot.error.toString()));
                     }
-      
+
                     if (snapshot.connectionState == ConnectionState.active) {
                       QuerySnapshot querySnapshot = snapshot.data;
                       List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
                           querySnapshot.docs;
-      
+
                       return ListView.builder(
                           shrinkWrap: true,
                           padding: const EdgeInsets.all(8),
@@ -74,52 +74,65 @@ class ambulanceUserState extends State<ambulanceUser> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       //photo
                                       Column(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment:CrossAxisAlignment.start,
-          
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Text('Name: ' + (document['name']),
-                                                style: TextStyle(fontSize: 15.0)),
-                                            Text('Phone No: ' + (document['ph_num']),
-                                                style: TextStyle(fontSize: 15.0)),
+                                                style:
+                                                    TextStyle(fontSize: 15.0)),
+                                            Text(
+                                                'Phone No: ' +
+                                                    (document['ph_num']),
+                                                style:
+                                                    TextStyle(fontSize: 15.0)),
                                             Text(
                                                 'Ambulance No.: ' +
                                                     (document['amb_num']),
-                                                style: TextStyle(fontSize: 15.0)),
+                                                style:
+                                                    TextStyle(fontSize: 15.0)),
                                             Text(
                                                 'Type: ' +
-                                                    (document['type'].toString()),
-                                                style: TextStyle(fontSize: 15.0)),
+                                                    (document['type']
+                                                        .toString()),
+                                                style:
+                                                    TextStyle(fontSize: 15.0)),
                                           ]),
-                                    ElevatedButton(
-                        child: Text(
-                          "Book",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ambulanceUser(),
-                              ),
-                            );
-      
-                        },
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Color.fromARGB(255, 30, 140, 190))),
-                      ),
+                                      ElevatedButton(
+                                        child: Text(
+                                          "Book",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => booking(
+                                                userid: document.id,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Color.fromARGB(
+                                                        255, 30, 140, 190))),
+                                      ),
                                     ],
                                   ),
                                 ));
                           });
                     }
-      
+
                     return const Center(child: CircularProgressIndicator());
                   }),
             ],
