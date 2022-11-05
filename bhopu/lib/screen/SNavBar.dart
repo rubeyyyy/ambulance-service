@@ -1,12 +1,12 @@
-import 'package:bhopu/screen/UHistory.dart';
+import 'package:bhopu/screen/Shistory.dart';
 import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/list.dart';
 import 'package:bhopu/screen/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class NavBar extends StatelessWidget {
-  const NavBar({Key? key}) : super(key: key);
+class SNavBar extends StatelessWidget {
+  const SNavBar({Key? key}) : super(key: key);
 
   void selectedItem(BuildContext context, int index) {
     Navigator.of(context)
@@ -18,26 +18,26 @@ class NavBar extends StatelessWidget {
         //   builder: (context)=> AdminDashboard(),
         //   ),);
         break;
+     // case 1:
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context)=> CandidateList(),
+        //   ),);
+       // break;
       case 1:
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (context)=> UHistory(),
-          ),);
-        break;
-      case 2:
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => ListPage(),
+            builder: (context) => SHistory(),
           ),
         );
         break;
-      case 3:
+      case 2:
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => complaints(),
           ),
         );
         break;
-      case 4:
+      case 3:
         FirebaseAuth.instance.signOut().then((value) {
           Navigator.push(
             context,
@@ -86,11 +86,7 @@ class NavBar extends StatelessWidget {
             title: const Text('History'),
             onTap: () => selectedItem(context, 1),
           ),
-          ListTile(
-            leading: const Icon(Icons.medical_services_outlined),
-            title: const Text('List of ambulance'),
-            onTap: () => selectedItem(context, 2),
-          ),
+          
           // ListTile(
           //   leading:const Icon(Icons.pages),
           //   title: const Text('About us'),
@@ -99,12 +95,12 @@ class NavBar extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.description),
             title: const Text('Complaints'),
-            onTap: () => selectedItem(context, 3),
+            onTap: () => selectedItem(context, 2),
           ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
             title: const Text('Logout'),
-            onTap: () => selectedItem(context, 4),
+            onTap: () => selectedItem(context, 3),
           ),
         ],
       ),

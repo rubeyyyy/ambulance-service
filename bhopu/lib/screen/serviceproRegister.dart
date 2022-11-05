@@ -250,6 +250,7 @@ class _servieproRegisterState extends State<servieproRegister> {
                         height: 10,
                       ),
                       DropdownButton<String>(
+                        value: dropdownvalue,
                         items: <String>['Equipped', 'Non Equipped']
                             .map((String value) {
                           return DropdownMenuItem<String>(
@@ -257,7 +258,11 @@ class _servieproRegisterState extends State<servieproRegister> {
                             child: Text(value),
                           );
                         }).toList(),
-                        onChanged: (_) {},
+                        onChanged: (String? newValue) {
+                          setState(() {
+                          dropdownvalue = newValue!;
+                        });
+                        },
                       ),
 
                       //submit button

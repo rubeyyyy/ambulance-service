@@ -263,8 +263,10 @@ class _bookingState extends State<booking> {
                                   .collection('Notification')
                                   .add({
                                 'PatientName': _PatientName.text,
-                                'Age': _Age.text,
-                                'PhoneNo': _PhoneNoController.text,
+                                 'Age': int.parse(_Age.text),
+                                  'PhoneNo':int.parse( _PhoneNoController.text),
+                                  //'Age': _Age.text,
+                                //'PhoneNo': _PhoneNoController.text,
                                 'AddFrom': _Addfrom.text,
                                 'AddTo': _Addto.text,
                                 'Date': selectedDate,
@@ -277,8 +279,8 @@ class _bookingState extends State<booking> {
                                     .collection('MyBookings')
                                     .add({
                                   'PatientName': _PatientName.text,
-                                  'Age': _Age.text,
-                                  'PhoneNo': _PhoneNoController.text,
+                                  'Age': int.parse(_Age.text),
+                                  'PhoneNo':int.parse( _PhoneNoController.text),
                                   'AddFrom': _Addfrom.text,
                                   'AddTo': _Addto.text,
                                   'Date': selectedDate,
