@@ -368,7 +368,7 @@ class _servieproRegisterState extends State<servieproRegister> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? serviceuser = _auth.currentUser;
 
-    ServiceModel serviceModel = ServiceModel();
+    ServiceModel serviceModel = ServiceModel(Longitude: 0, Latitude: 0);
 
     // writing all the values
     serviceModel.email = serviceuser!.email;
@@ -376,7 +376,8 @@ class _servieproRegisterState extends State<servieproRegister> {
     serviceModel.name = nameEditingController.text;
     serviceModel.phonenum = phonenumEditingController.text;
     serviceModel.Ambnum = ambnumEditingController.text;
-
+    serviceModel.Longitude=0;
+    serviceModel.Latitude=0;
     await firebaseFirestore
         .collection("service providers")
         .doc(serviceuser.uid)
