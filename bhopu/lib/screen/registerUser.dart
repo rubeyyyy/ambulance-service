@@ -1,13 +1,11 @@
 // ignore_for_file: camel_case_types
 
 import 'package:bhopu/model/user_model.dart';
-import 'package:bhopu/screen/dashboard.dart';
 
 import 'package:bhopu/screen/login.dart';
 import 'package:bhopu/screen/verify_email.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -119,6 +117,14 @@ class _registerUserState extends State<registerUser> {
                           if (value!.isEmpty) {
                             return 'Enter your Mobile';
                           }
+                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                          RegExp regExp = RegExp(patttern);
+                          if (value.isEmpty) {
+                            return 'Please enter mobile number';
+                          } else if (!regExp.hasMatch(value)) {
+                            return 'Please enter valid mobile number';
+                          }
+                          return null;
                         },
                         onSaved: (value) {
                           phonenumEditingController.text = value!;
@@ -333,7 +339,10 @@ class _registerUserState extends State<registerUser> {
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "waiting for email verification :) ");
 
-    Navigator.pushAndRemoveUntil((context),
-        MaterialPageRoute(builder: (context) => dashboard()), (route) => false);
+    Navigator.pushAndRemoveUntil(
+        (context),
+        MaterialPageRoute(
+            builder: (context) => VerifyMail(emailEditingController.text)),
+        (route) => false);
   }
 }

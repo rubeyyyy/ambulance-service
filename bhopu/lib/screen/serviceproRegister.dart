@@ -4,6 +4,7 @@ import 'package:bhopu/model/servicepro_model.dart';
 import 'package:bhopu/screen/dashboard.dart';
 import 'package:bhopu/screen/login.dart';
 import 'package:bhopu/screen/serviceDashboard.dart';
+import 'package:bhopu/screen/verify_email.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -119,6 +120,14 @@ class _servieproRegisterState extends State<servieproRegister> {
                           if (value!.isEmpty) {
                             return 'Enter your Mobile';
                           }
+                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                          RegExp regExp = RegExp(patttern);
+                          if (value.isEmpty) {
+                            return 'Please enter mobile number';
+                          } else if (!regExp.hasMatch(value)) {
+                            return 'Please enter valid mobile number';
+                          }
+                          return null;
                         },
                         onSaved: (value) {
                           phonenumEditingController.text = value!;
@@ -376,7 +385,8 @@ class _servieproRegisterState extends State<servieproRegister> {
 
     Navigator.pushAndRemoveUntil(
         (context),
-        MaterialPageRoute(builder: (context) => const serviceDashboard()),
+        MaterialPageRoute(
+            builder: (context) => VerifyMail(emailEditingController.text)),
         (route) => false);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:bhopu/admin/admin_page.dart';
 import 'package:bhopu/screen/dashboard.dart';
 import 'package:bhopu/screen/serviceDashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -200,30 +201,32 @@ class _MyLoginState extends State<MyLogin> {
             .signInWithEmailAndPassword(email: email, password: password)
             .then((value) {
           print("**************LOGIN SUCESS");
-          FirebaseFirestore.instance
-              .collection('users')
-              .doc(_auth.currentUser!.uid)
-              .get()
-              .then((uid) {
-            if (uid.exists) {
-              print('***********************Exist');
+          if (email == 'admin@bhopu.com') {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const AdminPage()));
+          } else {
+            FirebaseFirestore.instance
+                .collection('users')
+                .doc(_auth.currentUser!.uid)
+                .get()
+                .then((uid) {
+              if (uid.exists) {
+                print('***********************Exist');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => dashboard()));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => serviceDashboard()));
+              }
+            }).onError((error, stackTrace) {
+              Fluttertoast.showToast(
+                  msg: '***********************does not Exist');
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => dashboard()));
-              // Navigator.of(context).pushReplacement(
-              //  MaterialPageRoute(builder: (context) => const dashboard()));
-            } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => serviceDashboard()));
-              //Navigator.of(context).pushReplacement(MaterialPageRoute(
-              //   builder: (context) => const serviceDashboard()));
-            }
-          }).onError((error, stackTrace) {
-            print('***********************does not Exist');
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => dashboard()));
-            // Navigator.of(context).pushReplacement(MaterialPageRoute(
-            //   builder: (context) => const serviceDashboard()));
-          });
+            });
+          }
         });
         // .then((uid) => {
         Fluttertoast.showToast(msg: "Login Successful");

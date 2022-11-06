@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/list.dart';
 import 'package:bhopu/screen/login.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -55,12 +58,12 @@ class NavBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: const Text('Hello World'),
+            accountName: Text("I"),
             accountEmail: const Text('...'),
             currentAccountPicture: CircleAvatar(
               child: ClipOval(
                 child: Image.asset(
-                  'assets/image/1.JPEG',
+                  'assets/image/avatar.jpg',
                   fit: BoxFit.cover,
                   width: 90,
                   height: 90,

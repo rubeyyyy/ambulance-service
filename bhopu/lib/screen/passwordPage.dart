@@ -11,14 +11,9 @@ class _passwordPageState extends State<passwordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Text('I am password page')
-        
-        
-        
-      ],),
-      
-      
+      body: Column(
+        children: const [Text('I am password page')],
+      ),
     );
   }
 }

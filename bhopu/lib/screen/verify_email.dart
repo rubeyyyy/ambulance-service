@@ -1,4 +1,6 @@
 import 'dart:async';
+
+import 'package:bhopu/screen/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bhopu/screen/dashboard.dart';
@@ -40,7 +42,14 @@ class _VerifyMailPageState extends State<VerifyMail> {
     setState(() {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
-    if (isEmailVerified) timer?.cancel();
+    if (isEmailVerified == true) {
+      timer?.cancel();
+
+      Navigator.pushAndRemoveUntil(
+          (context),
+          MaterialPageRoute(builder: (context) => const MyLogin()),
+          (route) => false);
+    }
   }
 
   Future sendVerificationEmail() async {
@@ -72,8 +81,7 @@ class _VerifyMailPageState extends State<VerifyMail> {
                 ),
                 const Text(
                   'A verification email has been sent to your email!!!',
-                  style: TextStyle(
-                      fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
@@ -91,7 +99,7 @@ class _VerifyMailPageState extends State<VerifyMail> {
                     )),
                 TextButton(
                     onPressed: () => FirebaseAuth.instance.signOut(),
-                    child: const Text('Cancel'))
+                    child: const Text('Cancel')),
               ],
             ),
           ),
