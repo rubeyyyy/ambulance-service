@@ -89,14 +89,70 @@ class _userMapState extends State<userMap> {
 
       body: Stack(
         children: [
-          GoogleMap(
-            initialCameraPosition: initialCameraPosition,
-            markers: Set<Marker>.of(markerss.values),
-            mapType: MapType.normal,
-            onMapCreated: (GoogleMapController controller) {
-              googleMapController = controller;
-            },
+          Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: GoogleMap(
+              initialCameraPosition: initialCameraPosition,
+              markers: Set<Marker>.of(markerss.values),
+              mapType: MapType.normal,
+              onMapCreated: (GoogleMapController controller) {
+                googleMapController = controller;
+              },
+            ),
           ),
+          Container(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('service providers').snapshots(),
+              builder: (context, snapshots) {
+                return (snapshots.connectionState == ConnectionState.waiting)
+                    ? Center(
+                  child: CircularProgressIndicator(),
+                )
+                    : ListView.builder(
+
+                    itemCount: snapshots.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var data = snapshots.data!.docs[index].data()
+                      as Map<String, dynamic>;
+                      print("data printing");
+                      print(data);
+                      return GestureDetector(
+                          onTap: () {
+                            print("Tapped ");
+
+
+                            // add call button
+                          },
+
+                          //radius vairacha somehow
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
+                            child: Container(
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    data['name'].toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Comfortaa',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ));
+                    });
+              },
+            ),
+          ),
+
           ElevatedButton(
               onPressed: _handlePressButton,
               child: const Text("Search Places")),
