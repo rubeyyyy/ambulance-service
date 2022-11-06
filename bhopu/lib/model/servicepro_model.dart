@@ -4,20 +4,21 @@ class ServiceModel {
   String? name;
   String? phonenum;
   String? Ambnum;
-  String? type;
-
-  ServiceModel(
-      {this.uid, this.email, this.name, this.phonenum, this.Ambnum, this.type});
+  double Longitude=0;
+  double Latitude=0;
+  ServiceModel({this.uid, this.email, this.name, this.phonenum, this.Ambnum,required this.Longitude, required this.Latitude});
 
   // receiving data from server
   factory ServiceModel.fromMap(map) {
     return ServiceModel(
-        uid: map['uid'],
-        email: map['email'],
-        name: map['name'],
-        phonenum: map['ph_num'],
-        Ambnum: map['amb_num'],
-        type: map['type']);
+      uid: map['uid'],
+      email: map['email'],
+      name: map['name'],
+      phonenum: map['ph_num'],
+      Ambnum: map['amb_num'],
+      Longitude: map['Longitude'],
+      Latitude: map["Latitude"],);
+
   }
 
   // sending data to our server
@@ -28,7 +29,8 @@ class ServiceModel {
       'name': name,
       'ph_num': phonenum,
       'amb_num': Ambnum,
-      'type': type,
+      'Longitude': Longitude,
+      'Latitude': Latitude,
     };
   }
 }

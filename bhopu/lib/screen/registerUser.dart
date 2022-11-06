@@ -319,14 +319,15 @@ class _registerUserState extends State<registerUser> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    UserModel userModel = UserModel();
+    UserModel userModel = UserModel(Longitude: 0, Latitude: 0);
 
     // writing all the values
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.name = nameEditingController.text;
     userModel.phonenum = phonenumEditingController.text;
-
+    userModel.Longitude=0;
+    userModel.Latitude=0;
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)

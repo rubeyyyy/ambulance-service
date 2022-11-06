@@ -1,5 +1,6 @@
 import 'package:bhopu/screen/dashboard.dart';
 import 'package:bhopu/screen/serviceDashboard.dart';
+import 'package:bhopu/screen/userMap.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -25,8 +26,8 @@ class _MyLoginState extends State<MyLogin> {
 
   //firebase
   final _auth = FirebaseAuth.instance;
-  UserModel loggedInUser = UserModel();
-  ServiceModel loggedInDriver = ServiceModel();
+  UserModel loggedInUser = UserModel(Longitude: 0, Latitude: 0);
+  ServiceModel loggedInDriver = ServiceModel(Longitude: 0, Latitude: 0);
 
   // editing controller
   final TextEditingController emailController = TextEditingController();
