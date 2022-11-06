@@ -1,6 +1,5 @@
 import 'package:bhopu/screen/Shistory.dart';
 import 'package:bhopu/screen/complaints.dart';
-import 'package:bhopu/screen/list.dart';
 import 'package:bhopu/screen/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

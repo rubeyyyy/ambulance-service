@@ -276,8 +276,8 @@ class _bookingState extends State<booking> {
                                 FirebaseFirestore.instance
                                     .collection('users')
                                     .doc(_auth.currentUser!.uid)
-                                    .collection('MyBookings')
-                                    .add({
+                                    .collection('MyBookings').doc(value.id)
+                                    .set({
                                   'PatientName': _PatientName.text,
                                   'Age': int.parse(_Age.text),
                                   'PhoneNo':int.parse( _PhoneNoController.text),

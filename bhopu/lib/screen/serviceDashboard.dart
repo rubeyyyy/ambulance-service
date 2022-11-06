@@ -64,6 +64,15 @@ class _serviceDashboardState extends State<serviceDashboard> {
   }
   bool isSwitched = false;
 
+  bool isAfterToday(Timestamp timestamp) {
+    return DateTime.now().toUtc().isBefore(
+        DateTime.fromMillisecondsSinceEpoch(
+            timestamp.millisecondsSinceEpoch,
+            isUtc: false,
+        ).toUtc(),
+    );
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -211,7 +220,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
                         itemBuilder: (context, index) {
                           QueryDocumentSnapshot document =
                               listQueryDocumentSnapshot[index];
-                          return Card(
+                          return isAfterToday(document['Date'])?Card(
                               // child: Container(
                               //   child: Text((document['name'])),
                               //   height: 20,
@@ -244,16 +253,19 @@ class _serviceDashboardState extends State<serviceDashboard> {
                                           'location To: ' +
                                               (document['AddTo']),
                                           style: TextStyle(fontSize: 15.0)),
-                                          //  Text(
-                                          // 'Date: ' +
-                                          //     (document['Date']),
-                                          // style: TextStyle(fontSize: 15.0)),
-                                          //  Text(
-                                          // 'Time: ' +
-                                          //     (document['Time']),
-                                          // style: TextStyle(fontSize: 15.0)),
+                                           Text(
+                                          'Date: ' +
+                                              (
+                                                document['Date'].toDate().toString()
+                                                //DateTime.fromMillisecondsSinceEpoch(document['Date']).toString()
+                                                ),
+                                          style: TextStyle(fontSize: 15.0)),
+                                           Text(
+                                          'Time: ' +
+                                              (document['Time']),
+                                          style: TextStyle(fontSize: 15.0)),
                                     ]),
-                              ));
+                              )): Container();
                         });
                   }
 

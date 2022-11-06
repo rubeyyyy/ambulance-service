@@ -126,7 +126,7 @@ class _dashboardState extends State<dashboard> {
           Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => cancelBooking()));
+                            builder: (context) => CancelBooking()));
         },
       ),
         ),
