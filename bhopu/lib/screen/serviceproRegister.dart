@@ -358,7 +358,7 @@ class _servieproRegisterState extends State<servieproRegister> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
 
-    ServiceModel userModel = ServiceModel();
+    ServiceModel userModel = ServiceModel(Longitude: 0, Latitude: 0,);
 
     // writing all the values
     userModel.email = user!.email;
@@ -366,7 +366,8 @@ class _servieproRegisterState extends State<servieproRegister> {
     userModel.name = nameEditingController.text;
     userModel.phonenum = phonenumEditingController.text;
     userModel.Ambnum = ambnumEditingController.text;
-
+    userModel.Longitude = 0;
+    userModel.Latitude= 0;
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
