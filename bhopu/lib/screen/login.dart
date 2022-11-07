@@ -83,8 +83,8 @@ class _MyLoginState extends State<MyLogin> {
                           emailController.text = value!;
                         },
                         decoration: const InputDecoration(
-                            hintText: 'Enter your phone or email',
-                            labelText: 'Phone or Email',
+                            hintText: 'Enter your email',
+                            labelText: 'Email',
                             border: OutlineInputBorder())),
 
                     //password

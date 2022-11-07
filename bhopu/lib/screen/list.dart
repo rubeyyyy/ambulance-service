@@ -69,6 +69,7 @@ class ListPageState extends State<ListPage> {
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
                               color: Color.fromARGB(255, 238, 230, 230),
+                              shadowColor: Color.fromARGB(255, 204, 197, 190),
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -84,7 +85,7 @@ class ListPageState extends State<ListPage> {
                                       Text(
                                           'Ambulance No.: ' +
                                               (document['amb_num']),
-                                          style: TextStyle(fontSize: 15.0)),
+                                          style: TextStyle(fontSize: 15.0 )),
                                       Text(
                                           'Type: ' +
                                               (document['type'].toString()),

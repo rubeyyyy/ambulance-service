@@ -10,12 +10,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:bhopu/screen/dashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
 class servieproRegister extends StatefulWidget {
   const servieproRegister({Key? key}) : super(key: key);
 
   @override
   State<servieproRegister> createState() => _servieproRegisterState();
 }
+const kGoogleApiKey = 'AIzaSyD5Z5YTEO32vVbfauAVGOwyXcvtjLajIgY';
 
 class _servieproRegisterState extends State<servieproRegister> {
   final _formkey = GlobalKey<FormState>();
@@ -33,7 +46,67 @@ class _servieproRegisterState extends State<servieproRegister> {
   final ambnumEditingController = TextEditingController();
 
   String dropdownvalue = 'Equipped';
+  final CollectionReference _referenceList =
+      FirebaseFirestore.instance.collection('service providers');
+      late Stream<QuerySnapshot> _streamList;
+  //list of markers
+  final Set<Marker> markers = new Set();
+  Set<Marker> markersList = {};
+  double Lat = 0;
+  double Long = 0;
+  late GoogleMapController googleMapController;
+  final Mode _mode = Mode.overlay;
+  static const CameraPosition initialCameraPosition = CameraPosition(
+      target: LatLng(27.6720636, 85.3402312), zoom: 100);
+@override
+  void initState() {
+     _streamList = _referenceList.snapshots();
+    getMarkerData();
+    activateListner();
+    super.initState();
+  }
 
+  void activateListner() async {
+    Position position = await _determinePosition();
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(position.latitude, position.longitude), zoom: 14)));
+    //markersList.clear();
+    //markerss[0]=marker;
+    markers.add(Marker(
+        markerId: const MarkerId('currentLocation'),
+        position: LatLng(position.latitude, position.longitude),
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: const InfoWindow(
+          title: "Update Venue Location",
+        ))
+    );
+
+    setState(() {});
+  }
+  Map<MarkerId, Marker> markerss =<MarkerId,Marker> {};
+  void initMarker(specify, specifyID) async {
+    var markerIdVal = specifyID;
+    final MarkerId markerId = MarkerId(markerIdVal);
+    final Marker marker = Marker(markerId: markerId,
+        position: LatLng(specify['Latitude'], specify['Longitude']),
+        infoWindow: InfoWindow(title: specify['Name'],)
+    );
+    setState(() {
+      markerss[markerId]=marker;
+    });
+
+  }
+  Future getMarkerData() async {
+    FirebaseFirestore.instance.collection("service providers").get().then((value){
+      if(value.docs.isNotEmpty){
+        for(int i=0;i<value.docs.length;i++){
+          print("PRINTING DATA");
+          initMarker(value.docs[i].data(), value.docs[i].id);
+        }
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -259,6 +332,7 @@ class _servieproRegisterState extends State<servieproRegister> {
                         height: 10,
                       ),
                       DropdownButton<String>(
+                        value: dropdownvalue,
                         items: <String>['Equipped', 'Non Equipped']
                             .map((String value) {
                           return DropdownMenuItem<String>(
@@ -266,7 +340,11 @@ class _servieproRegisterState extends State<servieproRegister> {
                             child: Text(value),
                           );
                         }).toList(),
-                        onChanged: (_) {},
+                        onChanged: (String? newValue) {
+                            setState(() {
+                          dropdownvalue = newValue!;
+                        });
+                        },
                       ),
 
                       //submit button
@@ -390,4 +468,32 @@ class _servieproRegisterState extends State<servieproRegister> {
             builder: (context) => VerifyMail(emailEditingController.text)),
         (route) => false);
   }
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
+  } //
 }
