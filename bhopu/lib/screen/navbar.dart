@@ -3,6 +3,7 @@
 import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/list.dart';
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/profile.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +17,11 @@ class NavBar extends StatelessWidget {
 
     switch (index) {
       case 0:
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context)=> AdminDashboard(),
-        //   ),);
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Profile(),
+          ),
+        );
         break;
       case 1:
         // Navigator.of(context).push(MaterialPageRoute(
