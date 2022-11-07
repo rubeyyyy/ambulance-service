@@ -5,7 +5,7 @@ import 'package:bhopu/model/user_model.dart';
 import 'package:bhopu/screen/complaints.dart';
 import 'package:bhopu/screen/list.dart';
 import 'package:bhopu/screen/login.dart';
-import 'package:bhopu/screen/profile.dart';
+import 'package:bhopu/drawer/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
