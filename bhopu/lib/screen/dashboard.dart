@@ -2,7 +2,7 @@ import 'package:bhopu/model/order_tracking_page.dart';
 import 'package:bhopu/screen/ambulanceUser.dart';
 import 'package:bhopu/screen/booking.dart';
 import 'package:bhopu/screen/cancelBooking.dart';
-import 'package:bhopu/screen/navbar.dart';
+import 'package:bhopu/drawer/navbar.dart';
 import 'package:bhopu/screen/userMap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
@@ -60,10 +60,8 @@ class _dashboardState extends State<dashboard> {
                           EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     ),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => userMap()));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => userMap()));
                     },
                   ),
                 ),

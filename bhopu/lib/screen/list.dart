@@ -1,4 +1,4 @@
-import 'package:bhopu/screen/navbar.dart';
+import 'package:bhopu/drawer/navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 

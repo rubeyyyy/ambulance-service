@@ -1,10 +1,12 @@
-import 'package:bhopu/screen/navbar.dart';
+import 'package:bhopu/drawer/navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+
+import '../drawer/SNavBar.dart';
 
 // import 'package:custom_switch/custom_switch.dart';
 
@@ -81,7 +83,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
         title: Text('Bhopu'),
         backgroundColor: Color.fromARGB(255, 113, 174, 202),
       ),
-      drawer: NavBar(),
+      drawer: SNavBar(),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SingleChildScrollView(

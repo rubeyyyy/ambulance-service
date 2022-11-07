@@ -45,6 +45,26 @@ class _VerifyMailPageState extends State<VerifyMail> {
     if (isEmailVerified == true) {
       timer?.cancel();
 
+      //  showDialog(
+      //           context: context,
+      //           builder: (ctx) => AlertDialog(
+      //             title: const Text("Alert Dialog Box"),
+      //             content: const Text("You have raised a Alert Dialog Box"),
+      //             actions: <Widget>[
+      //               TextButton(
+      //                 onPressed: () {
+      //                   Navigator.of(ctx).pop();
+      //                 },
+      //                 child: Container(
+      //                   color: Colors.green,
+      //                   padding: const EdgeInsets.all(14),
+      //                   child: const Text("okay"),
+      //                 ),
+      //               ),
+      //             ],
+      //           ),
+      //         );
+
       Navigator.pushAndRemoveUntil(
           (context),
           MaterialPageRoute(builder: (context) => const MyLogin()),
@@ -81,7 +101,8 @@ class _VerifyMailPageState extends State<VerifyMail> {
                 ),
                 const Text(
                   'A verification email has been sent to your email!!!',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 24),
                 ElevatedButton.icon(

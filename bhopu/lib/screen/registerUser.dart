@@ -1,6 +1,7 @@
 // ignore_for_file: camel_case_types
 
 import 'package:bhopu/model/user_model.dart';
+import 'package:bhopu/screen/dashboard.dart';
 
 import 'package:bhopu/screen/login.dart';
 import 'package:bhopu/screen/verify_email.dart';
@@ -285,6 +286,7 @@ class _registerUserState extends State<registerUser> {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) => {postDetailsToFirestore()})
+            //.then((value) => VerifyMail(email))
             .catchError((e) async {
           Fluttertoast.showToast(msg: e!.message);
         });
@@ -332,8 +334,9 @@ class _registerUserState extends State<registerUser> {
     userModel.uid = user.uid;
     userModel.name = nameEditingController.text;
     userModel.phonenum = phonenumEditingController.text;
-    userModel.Longitude=0;
-    userModel.Latitude=0;
+    userModel.Longitude = 0;
+    userModel.Latitude = 0;
+
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
