@@ -68,8 +68,8 @@ class ListPageState extends State<ListPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15.0),
                               ),
-                              color: Color.fromARGB(255, 113, 223, 235),
-                              shadowColor: Color.fromARGB(255, 142, 218, 119),
+                              color: Color.fromARGB(255, 238, 230, 230),
+                              shadowColor: Color.fromARGB(255, 204, 197, 190),
                               elevation: 10,
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),

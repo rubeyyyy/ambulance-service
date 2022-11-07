@@ -82,7 +82,7 @@ class _dashboardState extends State<dashboard> {
                     style: ElevatedButton.styleFrom(
                       primary: Color.fromARGB(255, 255, 5, 5),
                       padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                      fixedSize: const Size(80, 80),
+                      fixedSize: const Size(85, 85),
                       shape: const CircleBorder(),
                     ),
                   ),
@@ -149,7 +149,7 @@ class _dashboardState extends State<dashboard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => cancelBooking()));
+                              builder: (context) => CancelBooking()));
                     },
                   ),
                 ),

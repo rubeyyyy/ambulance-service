@@ -5,6 +5,18 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:bhopu/screen/dashboard.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
+//import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 
 // import 'package:custom_switch/custom_switch.dart';
 
@@ -14,50 +26,93 @@ class serviceDashboard extends StatefulWidget {
   @override
   State<serviceDashboard> createState() => _serviceDashboardState();
 }
-
+const kGoogleApiKey = 'AIzaSyD5Z5YTEO32vVbfauAVGOwyXcvtjLajIgY';
 class _serviceDashboardState extends State<serviceDashboard> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  final Completer<GoogleMapController> _controller = Completer();
-  static const LatLng sourceLocation = LatLng(28.394857, 84.124008);
-  static const LatLng destination = LatLng(28.237987, 83.995588);
-  static const double _defaultLat = 8.85577417427599;
-  static const double _defaultLng = 38.85577417427599;
+  FirebaseAuth _authe = FirebaseAuth.instance;
   late bool Avai = false;
-  static const CameraPosition _defaultLocation =
-      CameraPosition(target: LatLng(_defaultLat, _defaultLng), zoom: 15);
-  LocationData? currentLocation;
-  void getCurrentLocation() {
-    Location location = Location();
 
-    location.getLocation().then(
-      (location) {
-        currentLocation = location;
-      },
+  FirebaseAuth _auth=FirebaseAuth.instance;
+  final CollectionReference _referenceList =
+      FirebaseFirestore.instance.collection('service providers');
+      late Stream<QuerySnapshot> _streamList;
+
+final CollectionReference _referenceListe =
+      FirebaseFirestore.instance.collection('service providers').doc(FirebaseAuth.instance.currentUser!.uid).collection('Notification');
+      late Stream<QuerySnapshot> _streamListe;
+
+  //list of markers
+  final Set<Marker> markers = new Set();
+  Set<Marker> markersList = {};
+  double Lat = 0;
+  double Long = 0;
+  late GoogleMapController googleMapController;
+  final Mode _mode = Mode.overlay;
+  static const CameraPosition initialCameraPosition = CameraPosition(
+      target: LatLng(27.6720636, 85.3402312), zoom: 100);
+
+  //Set<Marker> markers = {};
+
+  @override
+  void initState() {
+     _streamListe = _referenceListe.snapshots();
+    getMarkerData();
+    activateListner();
+    super.initState();
+  }
+ bool isAfterToday(Timestamp timestamp) {
+    return DateTime.now().toUtc().isBefore(
+        DateTime.fromMillisecondsSinceEpoch(
+            timestamp.millisecondsSinceEpoch,
+            isUtc: false,
+        ).toUtc(),
     );
+}
+  void activateListner() async {
+    Position position = await _determinePosition();
+    googleMapController.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(
+            target: LatLng(position.latitude, position.longitude), zoom: 14)));
+    //markersList.clear();
+    //markerss[0]=marker;
+    markers.add(Marker(
+        markerId: const MarkerId('currentLocation'),
+        position: LatLng(position.latitude, position.longitude),
+        icon: BitmapDescriptor.defaultMarker,
+        infoWindow: const InfoWindow(
+          title: "Update Venue Location",
+        ))
+    );
+
     setState(() {});
   }
-
-  final Set<Marker> _markers = {};
-  void _addMarker() {
+  Map<MarkerId, Marker> markerss =<MarkerId,Marker> {};
+  void initMarker(specify, specifyID) async {
+    var markerIdVal = specifyID;
+    final MarkerId markerId = MarkerId(markerIdVal);
+    final Marker marker = Marker(markerId: markerId,
+        position: LatLng(specify['Latitude'], specify['Longitude']),
+        infoWindow: InfoWindow(title: specify['Name'],)
+    );
     setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId('defaultLocation'),
-          position: _defaultLocation.target,
-          icon: BitmapDescriptor.defaultMarker,
-          infoWindow: const InfoWindow(
-            title: "PLACE NAME",
-            snippet: "RATINGS",
-          ),
-        ),
-      );
+      markerss[markerId]=marker;
+    });
+
+  }
+  Future getMarkerData() async {
+    FirebaseFirestore.instance.collection("service providers").get().then((value){
+      if(value.docs.isNotEmpty){
+        for(int i=0;i<value.docs.length;i++){
+          print("PRINTING DATA");
+          initMarker(value.docs[i].data(), value.docs[i].id);
+        }
+      }
     });
   }
 
   bool getAva() {
     FirebaseFirestore.instance
         .collection('service providers')
-        .doc(_auth.currentUser!.uid)
+        .doc(_authe.currentUser!.uid)
         .get()
         .then((value) {
       if (value.exists) {
@@ -67,10 +122,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
     return Avai;
   }
 
-  @override
-  void initState() {
-    getCurrentLocation();
-  }
+  
 
   //bool isSwitched = getAva();
 
@@ -125,7 +177,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
                                 Avai = true;
                                 FirebaseFirestore.instance
                                     .collection('service providers')
-                                    .doc(_auth.currentUser!.uid)
+                                    .doc(_authe.currentUser!.uid)
                                     .update({'availability': 'true'});
                                 // textValue = 'Switch Button is ON';
                               });
@@ -135,7 +187,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
                                 Avai = false;
                                 FirebaseFirestore.instance
                                     .collection('service providers')
-                                    .doc(_auth.currentUser!.uid)
+                                    .doc(_authe.currentUser!.uid)
                                     .update({'availability': 'false'});
                                 //textValue = 'Switch Button is OFF';
                               });
@@ -171,40 +223,21 @@ class _serviceDashboardState extends State<serviceDashboard> {
                     ),
                     color: Color.fromARGB(255, 241, 223, 222),
                     elevation: 10,
-                    child: currentLocation == null
-                        ? const Center(child: Text("Loading"))
-                        : GoogleMap(
-                            initialCameraPosition: CameraPosition(
-                              target: LatLng(currentLocation!.latitude!,
-                                  currentLocation!.longitude!),
-                              zoom: 13.5,
-                            ),
-                            markers: {
-                                Marker(
-                                  markerId: const MarkerId("currentLocation"),
-                                  position: LatLng(currentLocation!.latitude!,
-                                      currentLocation!.longitude!),
-                                )
-                              }),
+                    child:  GoogleMap(
+                      initialCameraPosition: initialCameraPosition,
+                      markers: Set<Marker>.of(markerss.values),
+                      mapType: MapType.normal,
+                      onMapCreated: (GoogleMapController controller) {
+                        googleMapController = controller;
+                      },
+                    ),
                   ),
                 ),
                 SizedBox(
                   height: 30,
                 ),
 
-                Container(
-                  padding: const EdgeInsets.only(top: 24, right: 12),
-                  alignment: Alignment.topRight,
-                  child: Column(
-                    children: <Widget>[
-                      FloatingActionButton(
-                        onPressed: _addMarker,
-                        backgroundColor: Colors.deepOrangeAccent,
-                        child: const Icon(Icons.add_location, size: 36.0),
-                      )
-                    ],
-                  ), // Column
-                ), //
+              
                 SizedBox(
                   height: 10,
                 ),
@@ -217,11 +250,7 @@ class _serviceDashboardState extends State<serviceDashboard> {
                       color: Colors.black),
                 ),
 
-                Container(
-                  width: 400,
-                  height: 170,
-                  padding: new EdgeInsets.all(5.0),
-                  child: Card(
+                Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15.0),
                       ),
@@ -233,22 +262,137 @@ class _serviceDashboardState extends State<serviceDashboard> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Text('Name of Patient:',
-                                  style: TextStyle(fontSize: 17.0)),
-                              Text('Date:', style: TextStyle(fontSize: 17.0)),
-                              Text('Time:', style: TextStyle(fontSize: 17.0)),
-                              Text('Phone Number:',
-                                  style: TextStyle(fontSize: 17.0)),
-                              Text('Location From:',
-                                  style: TextStyle(fontSize: 17.0)),
-                              Text('Location To:',
-                                  style: TextStyle(fontSize: 17.0)),
-                            ]),
-                      )),
-                ),
-              ]),
+                              StreamBuilder<QuerySnapshot>(
+                stream: _streamListe,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  }
+
+                  if (snapshot.connectionState == ConnectionState.active) {
+                    QuerySnapshot querySnapshot = snapshot.data;
+                    List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
+                        querySnapshot.docs;
+
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(8),
+                        itemCount: listQueryDocumentSnapshot.length,
+                        itemBuilder: (context, index) {
+                          QueryDocumentSnapshot document =
+                              listQueryDocumentSnapshot[index];
+                          return isAfterToday(document['Date'])?Card(
+                              // child: Container(
+                              //   child: Text((document['name'])),
+                              //   height: 20,
+                              // ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              ),
+                              color: Color.fromARGB(255, 238, 230, 230),
+                              elevation: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Patient Name: ' + (document['PatientName']),
+                                          style: TextStyle(fontSize: 15.0)),
+                                      // Text('Phone No: ' + (document['PhoneNo']),
+                                      //     style: TextStyle(fontSize: 15.0)),
+                                      // Text(
+                                      //     'Age.: ' +
+                                      //         (document['Age']),
+                                      //     style: TextStyle(fontSize: 15.0)),
+                                      Text(
+                                          'location from: ' +
+                                              (document['AddFrom']),
+                                          style: TextStyle(fontSize: 15.0)),
+                                          Text(
+                                          'location To: ' +
+                                              (document['AddTo']),
+                                          style: TextStyle(fontSize: 15.0)),
+                                           Text(
+                                          'Date: ' +
+                                              (
+                                                document['Date'].toDate().toString()
+                                                //DateTime.fromMillisecondsSinceEpoch(document['Date']).toString()
+                                                ),
+                                          style: TextStyle(fontSize: 15.0)),
+                                           Text(
+                                          'Time: ' +
+                                              (document['Time']),
+                                          style: TextStyle(fontSize: 15.0)),
+                                    ]),
+                              )): Container();
+                        });
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
+                }),
+
+                            ]
+                        ),
+                      )
+                  ),
+                ],),
+              ),
         ),
-      ),
-    );
+      );
+   
   }
+  
+  Future<void> displayPrediction(
+      Prediction p, ScaffoldState? currentState) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+        apiKey: kGoogleApiKey,
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
+
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+
+    markersList.clear();
+    markersList.add(Marker(
+        markerId: const MarkerId("0"),
+        position: LatLng(lat, lng),
+        infoWindow: InfoWindow(title: detail.result.name)));
+
+    setState(() {});
+
+    googleMapController
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled');
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+
+      if (permission == LocationPermission.denied) {
+        return Future.error("Location permission denied");
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied');
+    }
+
+    Position position = await Geolocator.getCurrentPosition();
+
+    return position;
+  } //
 }

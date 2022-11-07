@@ -93,145 +93,149 @@ class _userMapState extends State<userMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: homeScaffoldKey,
-      appBar: AppBar(
-        title: const Text("Google Search Places"),
-      ),
-
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-                    "Your location",
-                    style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w500,
-                        fontFamily: 'Montserrat',
-                    ),),
-               ElevatedButton(
-                    onPressed: _handlePressButton,
-                    child: const Text("Search Places")),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: GoogleMap(
-                    initialCameraPosition: initialCameraPosition,
-                    markers: Set<Marker>.of(markerss.values),
-                    mapType: MapType.normal,
-                    onMapCreated: (GoogleMapController controller) {
-                      googleMapController = controller;
-                    },
-                  ),
-                ),
-            
-             SizedBox(
-                    height: 30,
-                  ),
       
-               
+
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+                 SizedBox(
+                  width: 450,
+                  height: 50,
+                   child: ElevatedButton(
+                    
+                        onPressed: _handlePressButton,
+                        child: const Text("Search Places",),
+                        style: ButtonStyle(
+                          
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Color.fromARGB(255, 211, 242, 255)))),
+                 ),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.5,
+                    
+                    child: GoogleMap(
+                      initialCameraPosition: initialCameraPosition,
+                      markers: Set<Marker>.of(markerss.values),
+                      mapType: MapType.normal,
+                      onMapCreated: (GoogleMapController controller) {
+                        googleMapController = controller;
+                      },
+                    ),
+                  ),
+              
+               SizedBox(
+                      height: 30,
+                    ),
+        
                  
-           Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15.0),
-                          ),
-                          color: Color.fromARGB(255, 241, 223, 222),
-                          // elevation: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  StreamBuilder<QuerySnapshot>(
-                    stream: _streamList,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(child: Text(snapshot.error.toString()));
-                      }
-        
-                      if (snapshot.connectionState == ConnectionState.active) {
-                        QuerySnapshot querySnapshot = snapshot.data;
-                        List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
-                            querySnapshot.docs;
-        
-                        return ListView.builder(
-                            shrinkWrap: true,
-                            padding: const EdgeInsets.all(8),
-                            itemCount: listQueryDocumentSnapshot.length,
-                            itemBuilder: (context, index) {
-                              QueryDocumentSnapshot document =
-                                  listQueryDocumentSnapshot[index];
-                                  if(document['availability']=='true')
-                              availabilityStats="Available";
-                            else
-                              availabilityStats="Unavailable";
-                              return Card(
-                                  // child: Container(
-                                  //   child: Text((document['name'])),
-                                  //   height: 20,
-                                  // ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0),
-                                  ),
-                                  color: Color.fromARGB(255, 238, 230, 230),
-                                  elevation: 10,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                      children: [
-                                        Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('Name: ' + (document['name']),
-                                                  style: TextStyle(fontSize: 15.0)),
-                                              Text('Availability Status: ' + (availabilityStats),
-                                                  style: TextStyle(fontSize: 15.0)),
-                                              
-                                            ]),
-                                            ElevatedButton(
-                                        child: Text(
-                                          "Call",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        onPressed: () {
-                                          callNumber() async {
-                                            print("CALL NUMBER CALLED     "+document['ph_num']);
-                                            var number = document['ph_num'];
-                                            bool? call = await FlutterPhoneDirectCaller.callNumber(number);
-                                          }
-                                          callNumber();
-
-                                        },
-                                        style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all(
-                                                    Color.fromARGB(
-                                                        255, 30, 140, 190))),
-                                      ),
-                                      ],
-                                      
-                                    ),
-                                  ));
-                            });
-                      }
-        
-                      return const Center(child: CircularProgressIndicator());
-                    }),
-        
-                                ]
+                   
+             Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
                             ),
-                          )
-                      ),
-        
+                            color: Color.fromARGB(255, 241, 223, 222),
+                            // elevation: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    StreamBuilder<QuerySnapshot>(
+                      stream: _streamList,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(child: Text(snapshot.error.toString()));
+                        }
+          
+                        if (snapshot.connectionState == ConnectionState.active) {
+                          QuerySnapshot querySnapshot = snapshot.data;
+                          List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
+                              querySnapshot.docs;
+          
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.all(8),
+                              itemCount: listQueryDocumentSnapshot.length,
+                              itemBuilder: (context, index) {
+                                QueryDocumentSnapshot document =
+                                    listQueryDocumentSnapshot[index];
+                                    if(document['availability']=='true')
+                                availabilityStats="Available";
+                              else
+                                availabilityStats="Unavailable";
+                                return Card(
+                                    // child: Container(
+                                    //   child: Text((document['name'])),
+                                    //   height: 20,
+                                    // ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    color: Color.fromARGB(255, 238, 230, 230),
+                                    elevation: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text('Name: ' + (document['name']),
+                                                    style: TextStyle(fontSize: 15.0)),
+                                                Text('Availability Status: ' + (availabilityStats),
+                                                    style: TextStyle(fontSize: 15.0)),
+                                                
+                                              ]),
+                                              ElevatedButton(
+                                          child: Text(
+                                            "Call",
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: () {
+                                            callNumber() async {
+                                              print("CALL NUMBER CALLED     "+document['ph_num']);
+                                              var number = document['ph_num'];
+                                              bool? call = await FlutterPhoneDirectCaller.callNumber(number);
+                                            }
+                                            callNumber();
       
-            // 
-        ],
+                                          },
+                                          style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all(
+                                                      Color.fromARGB(
+                                                          255, 30, 140, 190))),
+                                        ),
+                                        ],
+                                        
+                                      ),
+                                    ));
+                              });
+                        }
+          
+                        return const Center(child: CircularProgressIndicator());
+                      }),
+          
+                                  ]
+                              ),
+                            )
+                        ),
+          
+        
+              // 
+          ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
