@@ -1,4 +1,5 @@
 
+import 'package:bhopu/screen/dashboard.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,16 +10,24 @@ import 'package:geolocator/geolocator.dart';
 //import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+
 class userMap extends StatefulWidget {
   const userMap({Key? key}) : super(key: key);
 
   @override
   State<userMap> createState() => _userMapState();
+  
 }
-const kGoogleApiKey = 'AIzaSyASWWy9gVLxU-J4sxZavRQ_nsFqFDVMDI8';
+const kGoogleApiKey = 'AIzaSyD5Z5YTEO32vVbfauAVGOwyXcvtjLajIgY';
+String availabilityStats = "";
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
-class _userMapState extends State<userMap> {
 
+class _userMapState extends State<userMap> {
+  FirebaseAuth _auth=FirebaseAuth.instance;
+  final CollectionReference _referenceList =
+      FirebaseFirestore.instance.collection('service providers');
+      late Stream<QuerySnapshot> _streamList;
   //list of markers
   final Set<Marker> markers = new Set();
   Set<Marker> markersList = {};
@@ -28,11 +37,12 @@ class _userMapState extends State<userMap> {
   final Mode _mode = Mode.overlay;
   static const CameraPosition initialCameraPosition = CameraPosition(
       target: LatLng(27.6720636, 85.3402312), zoom: 100);
-  FirebaseAuth _auth=FirebaseAuth.instance;
+
   //Set<Marker> markers = {};
 
   @override
   void initState() {
+     _streamList = _referenceList.snapshots();
     getMarkerData();
     activateListner();
     super.initState();
@@ -87,77 +97,142 @@ class _userMapState extends State<userMap> {
         title: const Text("Google Search Places"),
       ),
 
-      body: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.5,
-            child: GoogleMap(
-              initialCameraPosition: initialCameraPosition,
-              markers: Set<Marker>.of(markerss.values),
-              mapType: MapType.normal,
-              onMapCreated: (GoogleMapController controller) {
-                googleMapController = controller;
-              },
-            ),
-          ),
-          Container(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('service providers').snapshots(),
-              builder: (context, snapshots) {
-                return (snapshots.connectionState == ConnectionState.waiting)
-                    ? Center(
-                  child: CircularProgressIndicator(),
-                )
-                    : ListView.builder(
-
-                    itemCount: snapshots.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      var data = snapshots.data!.docs[index].data()
-                      as Map<String, dynamic>;
-                      print("data printing");
-                      print(data);
-                      return GestureDetector(
-                          onTap: () {
-                            print("Tapped ");
-
-
-                            // add call button
-                          },
-
-                          //radius vairacha somehow
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+                    "Your location",
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: 'Montserrat',
+                    ),),
+               ElevatedButton(
+                    onPressed: _handlePressButton,
+                    child: const Text("Search Places")),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: GoogleMap(
+                    initialCameraPosition: initialCameraPosition,
+                    markers: Set<Marker>.of(markerss.values),
+                    mapType: MapType.normal,
+                    onMapCreated: (GoogleMapController controller) {
+                      googleMapController = controller;
+                    },
+                  ),
+                ),
+            
+             SizedBox(
+                    height: 30,
+                  ),
+      
+               
+                 
+           Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15.0),
+                          ),
+                          color: Color.fromARGB(255, 241, 223, 222),
+                          // elevation: 10,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10),
-                            child: Container(
-                              height: 100,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: Row(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 20,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  StreamBuilder<QuerySnapshot>(
+                    stream: _streamList,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text(snapshot.error.toString()));
+                      }
+        
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        QuerySnapshot querySnapshot = snapshot.data;
+                        List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
+                            querySnapshot.docs;
+        
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(8),
+                            itemCount: listQueryDocumentSnapshot.length,
+                            itemBuilder: (context, index) {
+                              QueryDocumentSnapshot document =
+                                  listQueryDocumentSnapshot[index];
+                                  if(document['availability']=='true')
+                              availabilityStats="Available";
+                            else
+                              availabilityStats="Unavailable";
+                              return Card(
+                                  // child: Container(
+                                  //   child: Text((document['name'])),
+                                  //   height: 20,
+                                  // ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(5.0),
                                   ),
-                                  Text(
-                                    data['name'].toString(),
-                                    style: TextStyle(
-                                        fontFamily: 'Comfortaa',
+                                  color: Color.fromARGB(255, 238, 230, 230),
+                                  elevation: 10,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                      children: [
+                                        Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Text('Name: ' + (document['name']),
+                                                  style: TextStyle(fontSize: 15.0)),
+                                              Text('Availability Status: ' + (availabilityStats),
+                                                  style: TextStyle(fontSize: 15.0)),
+                                              
+                                            ]),
+                                            ElevatedButton(
+                                        child: Text(
+                                          "Call",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () {
+                                          callNumber() async {
+                                            print("CALL NUMBER CALLED     "+document['ph_num']);
+                                            var number = document['ph_num'];
+                                            bool? call = await FlutterPhoneDirectCaller.callNumber(number);
+                                          }
+                                          callNumber();
+
+                                        },
+                                        style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Color.fromARGB(
+                                                        255, 30, 140, 190))),
+                                      ),
+                                      ],
+                                      
                                     ),
-                                  ),
-                                ],
-                              ),
+                                  ));
+                            });
+                      }
+        
+                      return const Center(child: CircularProgressIndicator());
+                    }),
+        
+                                ]
                             ),
-                          ));
-                    });
-              },
-            ),
-          ),
-
-          ElevatedButton(
-              onPressed: _handlePressButton,
-              child: const Text("Search Places")),
-
+                          )
+                      ),
+        
+      
+            // 
         ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
