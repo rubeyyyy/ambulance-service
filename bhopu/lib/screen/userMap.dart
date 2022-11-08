@@ -113,7 +113,7 @@ class _userMapState extends State<userMap> {
                           
                                                 backgroundColor:
                                                     MaterialStateProperty.all(
-                                                        Color.fromARGB(255, 211, 242, 255)))),
+                                                        Color.fromARGB(255, 78, 157, 190)))),
                  ),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.5,
@@ -133,7 +133,22 @@ class _userMapState extends State<userMap> {
                SizedBox(
                       height: 30,
                     ),
-        
+                Text(
+                            'List of Nearby Users',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Montserrat',
+                                color: Colors.black),
+                          ),
+                          Text(
+                            'Sorted by nearest location',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w300,
+                                fontFamily: 'Montserrat',
+                                color: Colors.black),
+                          ),
                  
                    
              Card(

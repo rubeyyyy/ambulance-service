@@ -6,10 +6,12 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    //initialRoute: 'login',
-    home: MainPage(),
-    //routes: {'login': (context) => const MainPage()},
-  ));
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const MainPage(),
+    );
+  }
 }

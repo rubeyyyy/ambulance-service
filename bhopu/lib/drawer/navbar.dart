@@ -62,8 +62,7 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+    return  FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           future: FirebaseFirestore.instance
               .collection('users')
               .doc(_auth.currentUser!.uid)
@@ -136,7 +135,6 @@ class NavBar extends StatelessWidget {
                 ],
               ),
             );
-          }),
-    );
+          });
   }
 }
