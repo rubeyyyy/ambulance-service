@@ -1,27 +1,27 @@
-import 'package:bhopu/drawer/navbar.dart';
+import 'package:bhopu/drawer/SNavBar.dart';
 import 'package:bhopu/screen/mainpge.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class Profile extends StatefulWidget {
+class SProfile extends StatefulWidget {
   @override
-  State<Profile> createState() => _ProfilePageState();
+  State<SProfile> createState() => _SProfilePageState();
 }
 
-class _ProfilePageState extends State<Profile> {
+class _SProfilePageState extends State<SProfile> {
   final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavBar(),
+        drawer: SNavBar(),
         appBar: AppBar(
           title: const Text('Profile'),
         ),
         body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             future: FirebaseFirestore.instance
-                .collection('users')
+                .collection('service providers')
                 .doc(_auth.currentUser!.uid)
                 .get(),
             builder: (_, snapshot) {

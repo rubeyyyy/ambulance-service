@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bhopu/screen/login.dart';
+import 'package:bhopu/screen/mainpge.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bhopu/screen/dashboard.dart';
@@ -119,7 +120,13 @@ class _VerifyMailPageState extends State<VerifyMail> {
                           fontFamily: 'OpenSans', fontWeight: FontWeight.bold),
                     )),
                 TextButton(
-                    onPressed: () => FirebaseAuth.instance.signOut(),
+                    onPressed: () => FirebaseAuth.instance.signOut().then(
+                        (value) => {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MainPage()))
+                            }),
                     child: const Text('Cancel')),
               ],
             ),

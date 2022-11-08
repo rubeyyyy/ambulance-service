@@ -18,17 +18,17 @@ class userMap extends StatefulWidget {
 
   @override
   State<userMap> createState() => _userMapState();
-  
 }
+
 const kGoogleApiKey = 'AIzaSyD5Z5YTEO32vVbfauAVGOwyXcvtjLajIgY';
 String availabilityStats = "";
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _userMapState extends State<userMap> {
-  FirebaseAuth _auth=FirebaseAuth.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference _referenceList =
       FirebaseFirestore.instance.collection('service providers');
-      late Stream<QuerySnapshot> _streamList;
+  late Stream<QuerySnapshot> _streamList;
   //list of markers
   final Set<Marker> markers = new Set();
   Set<Marker> markersList = {};
@@ -36,14 +36,14 @@ class _userMapState extends State<userMap> {
   double Long = 0;
   late GoogleMapController googleMapController;
   final Mode _mode = Mode.overlay;
-  static const CameraPosition initialCameraPosition = CameraPosition(
-      target: LatLng(27.6720636, 85.3402312), zoom: 100);
+  static const CameraPosition initialCameraPosition =
+      CameraPosition(target: LatLng(27.6720636, 85.3402312), zoom: 100);
 
   //Set<Marker> markers = {};
 
   @override
   void initState() {
-     _streamList = _referenceList.snapshots();
+    _streamList = _referenceList.snapshots();
     getMarkerData();
     activateListner();
     super.initState();
@@ -62,218 +62,244 @@ class _userMapState extends State<userMap> {
         icon: BitmapDescriptor.defaultMarker,
         infoWindow: const InfoWindow(
           title: "Update Venue Location",
-        ))
-    );
-
+        )));
+    final docUser = FirebaseFirestore.instance
+        .collection('users')
+        .doc(_auth.currentUser!.uid);
+    Lat = position.latitude;
+    Long = position.longitude;
+    docUser.update({"Latitude": Lat, "Longitude": Long});
     setState(() {});
   }
-  Map<MarkerId, Marker> markerss =<MarkerId,Marker> {};
+
+  Map<MarkerId, Marker> markerss = <MarkerId, Marker>{};
   void initMarker(specify, specifyID) async {
     var markerIdVal = specifyID;
     final MarkerId markerId = MarkerId(markerIdVal);
-    final Marker marker = Marker(markerId: markerId,
+    final Marker marker = Marker(
+        markerId: markerId,
         position: LatLng(specify['Latitude'], specify['Longitude']),
-        infoWindow: InfoWindow(title: specify['Name'],)
-    );
+        infoWindow: InfoWindow(
+          title: specify['Name'],
+        ));
     setState(() {
-      markerss[markerId]=marker;
+      markerss[markerId] = marker;
     });
-
   }
+
   Future getMarkerData() async {
-    FirebaseFirestore.instance.collection("service providers").get().then((value){
-      if(value.docs.isNotEmpty){
-        for(int i=0;i<value.docs.length;i++){
+    FirebaseFirestore.instance
+        .collection("service providers")
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        for (int i = 0; i < value.docs.length; i++) {
           print("PRINTING DATA");
           initMarker(value.docs[i].data(), value.docs[i].id);
         }
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: homeScaffoldKey,
-      
-
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                 SizedBox(
-                  width: 450,
-                  height: 50,
-                   child: ElevatedButton(
-                    
-                        onPressed: _handlePressButton,
-                        child: const Text("Search Places",),
-                        style: ButtonStyle(
-                          
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Color.fromARGB(255, 78, 157, 190)))),
-                 ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    
-                    child: GoogleMap(
-                      initialCameraPosition: initialCameraPosition,
-                      markers: Set<Marker>.of(markerss.values),
-                      mapType: MapType.normal,
-                      onMapCreated: (GoogleMapController controller) {
-                        googleMapController = controller;
-                      },
-                      gestureRecognizers: Set()
-                       ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+              SizedBox(
+                width: 450,
+                height: 50,
+                child: ElevatedButton(
+                    onPressed: _handlePressButton,
+                    child: const Text(
+                      "Search Places",
                     ),
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Color.fromARGB(255, 78, 157, 190)))),
+              ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: GoogleMap(
+                    initialCameraPosition: initialCameraPosition,
+                    markers: Set<Marker>.of(markerss.values),
+                    mapType: MapType.normal,
+                    onMapCreated: (GoogleMapController controller) {
+                      googleMapController = controller;
+                    },
+                    gestureRecognizers: Set()
+                      ..add(Factory<PanGestureRecognizer>(
+                          () => PanGestureRecognizer()))),
+              ),
+
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                'List of Nearby Service Providers',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Montserrat',
+                    color: Colors.black),
+              ),
+              Text(
+                'Sorted by nearest location',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
+                    fontFamily: 'Montserrat',
+                    color: Colors.black),
+              ),
+
+              Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.0),
                   ),
-              
-               SizedBox(
-                      height: 30,
-                    ),
-                Text(
-                            'List of Nearby Users',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: 'Montserrat',
-                                color: Colors.black),
-                          ),
-                          Text(
-                            'Sorted by nearest location',
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w300,
-                                fontFamily: 'Montserrat',
-                                color: Colors.black),
-                          ),
-                 
-                   
-             Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            color: Color.fromARGB(255, 241, 223, 222),
-                            // elevation: 10,
-                            child: Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    StreamBuilder<QuerySnapshot>(
-                      stream: _streamList,
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasError) {
-                          return Center(child: Text(snapshot.error.toString()));
-                        }
-          
-                        if (snapshot.connectionState == ConnectionState.active) {
-                          QuerySnapshot querySnapshot = snapshot.data;
-                          List<QueryDocumentSnapshot> listQueryDocumentSnapshot =
-                              querySnapshot.docs;
-          
-                          return ListView.builder(
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.all(8),
-                              itemCount: listQueryDocumentSnapshot.length,
-                              itemBuilder: (context, index) {
-                                QueryDocumentSnapshot document =
-                                    listQueryDocumentSnapshot[index];
-                                    if(document['availability']=='true')
-                                availabilityStats="Available";
-                              else
-                                availabilityStats="Unavailable";
-                                return Card(
-                                    // child: Container(
-                                    //   child: Text((document['name'])),
-                                    //   height: 20,
-                                    // ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(5.0),
-                                    ),
-                                    color: Color.fromARGB(255, 238, 230, 230),
-                                    elevation: 10,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                Text('Name: ' + (document['name']),
-                                                    style: TextStyle(fontSize: 15.0)),
-                                                Text('Availability Status: ' + (availabilityStats),
-                                                    style: TextStyle(fontSize: 15.0)),
-                                                
-                                              ]),
-                                              ElevatedButton(
-                                          child: Text(
-                                            "Call",
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                          onPressed: () {
-                                            callNumber() async {
-                                              print("CALL NUMBER CALLED     "+document['ph_num']);
-                                              var number = document['ph_num'];
-                                              bool? call = await FlutterPhoneDirectCaller.callNumber(number);
-                                            }
-                                            callNumber();
-      
-                                          },
-                                          style: ButtonStyle(
-                                              backgroundColor:
-                                                  MaterialStateProperty.all(
-                                                      Color.fromARGB(
-                                                          255, 30, 140, 190))),
-                                        ),
-                                        ],
-                                        
-                                      ),
-                                    ));
-                              });
-                        }
-          
-                        return const Center(child: CircularProgressIndicator());
-                      }),
-          
-                                  ]
-                              ),
-                            )
-                        ),
-          
-        
-              // 
-          ],
+                  color: Color.fromARGB(255, 241, 223, 222),
+                  // elevation: 10,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          StreamBuilder<QuerySnapshot>(
+                              stream: _streamList,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasError) {
+                                  return Center(
+                                      child: Text(snapshot.error.toString()));
+                                }
+
+                                if (snapshot.connectionState ==
+                                    ConnectionState.active) {
+                                  QuerySnapshot querySnapshot = snapshot.data;
+                                  List<QueryDocumentSnapshot>
+                                      listQueryDocumentSnapshot =
+                                      querySnapshot.docs;
+
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      padding: const EdgeInsets.all(8),
+                                      itemCount:
+                                          listQueryDocumentSnapshot.length,
+                                      itemBuilder: (context, index) {
+                                        QueryDocumentSnapshot document =
+                                            listQueryDocumentSnapshot[index];
+                                        if (document['availability'] == 'true')
+                                          availabilityStats = "Available";
+                                        else
+                                          availabilityStats = "Unavailable";
+                                        return Card(
+                                            // child: Container(
+                                            //   child: Text((document['name'])),
+                                            //   height: 20,
+                                            // ),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5.0),
+                                            ),
+                                            color: Color.fromARGB(
+                                                255, 238, 230, 230),
+                                            elevation: 10,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(5.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        Text(
+                                                            'Name: ' +
+                                                                (document[
+                                                                    'name']),
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    15.0)),
+                                                        Text(
+                                                            'Availability Status: ' +
+                                                                (availabilityStats),
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    15.0)),
+                                                      ]),
+                                                  ElevatedButton(
+                                                    child: Text(
+                                                      "Call",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                    onPressed: () {
+                                                      callNumber() async {
+                                                        print(
+                                                            "CALL NUMBER CALLED     " +
+                                                                document[
+                                                                    'ph_num']);
+                                                        var number =
+                                                            document['ph_num'];
+                                                        bool? call =
+                                                            await FlutterPhoneDirectCaller
+                                                                .callNumber(
+                                                                    number);
+                                                      }
+
+                                                      callNumber();
+                                                    },
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStateProperty
+                                                                .all(Color
+                                                                    .fromARGB(
+                                                                        255,
+                                                                        30,
+                                                                        140,
+                                                                        190))),
+                                                  ),
+                                                ],
+                                              ),
+                                            ));
+                                      });
+                                }
+
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }),
+                        ]),
+                  )),
+
+              //
+            ],
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           // final uid = extractData().getUserUID();
-          final docUser = FirebaseFirestore.instance.collection('service providers').doc(_auth.currentUser!.uid);
-          // docUser.update(
-          //     {
-          //
-          //     }
-          // );
+          final docUser = FirebaseFirestore.instance
+              .collection('service providers')
+              .doc(_auth.currentUser!.uid);
           Position position = await _determinePosition();
-          Lat=position.latitude;
-          Long=position.longitude;
-          docUser.update(
-              {
-                "Latitude":Lat,
-                "Longitude":Long
-              }
-          );
+          Lat = position.latitude;
+          Long = position.longitude;
+          docUser.update({"Latitude": Lat, "Longitude": Long});
           // googleMapController.animateCamera(CameraUpdate.newCameraPosition(
           //     CameraPosition(
           //         target: LatLng(position.latitude, position.longitude),
@@ -292,7 +318,6 @@ class _userMapState extends State<userMap> {
         label: const Text("Update Venue Location"),
         icon: const Icon(Icons.location_history),
       ),
-
     );
   }
 
@@ -382,4 +407,3 @@ class _userMapState extends State<userMap> {
     return position;
   } //
 }
-

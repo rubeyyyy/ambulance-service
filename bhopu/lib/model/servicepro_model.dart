@@ -5,9 +5,19 @@ class ServiceModel {
   String? phonenum;
   String? Ambnum;
   String? type;
-  double Longitude=0;
-  double Latitude=0;
-  ServiceModel({this.uid, this.email, this.name, this.phonenum, this.type, this.Ambnum,required this.Longitude, required this.Latitude});
+  double Longitude = 0;
+  double Latitude = 0;
+  String? availability;
+  ServiceModel(
+      {this.uid,
+      this.email,
+      this.name,
+      this.phonenum,
+      this.type,
+      this.Ambnum,
+      this.availability,
+      required this.Longitude,
+      required this.Latitude});
 
   // receiving data from server
   factory ServiceModel.fromMap(map) {
@@ -19,8 +29,9 @@ class ServiceModel {
       phonenum: map['ph_num'],
       Ambnum: map['amb_num'],
       Longitude: map['Longitude'],
-      Latitude: map["Latitude"],);
-
+      Latitude: map["Latitude"],
+      availability: map['availability'],
+    );
   }
 
   // sending data to our server
@@ -34,6 +45,7 @@ class ServiceModel {
       'type': type,
       'Longitude': Longitude,
       'Latitude': Latitude,
+      'availability': availability,
     };
   }
 }

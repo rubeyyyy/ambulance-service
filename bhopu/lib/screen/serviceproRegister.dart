@@ -28,6 +28,7 @@ class servieproRegister extends StatefulWidget {
   @override
   State<servieproRegister> createState() => _servieproRegisterState();
 }
+
 const kGoogleApiKey = 'AIzaSyD5Z5YTEO32vVbfauAVGOwyXcvtjLajIgY';
 
 class _servieproRegisterState extends State<servieproRegister> {
@@ -48,7 +49,7 @@ class _servieproRegisterState extends State<servieproRegister> {
   String dropdownvalue = 'Equipped';
   final CollectionReference _referenceList =
       FirebaseFirestore.instance.collection('service providers');
-      late Stream<QuerySnapshot> _streamList;
+  late Stream<QuerySnapshot> _streamList;
   //list of markers
   final Set<Marker> markers = new Set();
   Set<Marker> markersList = {};
@@ -56,11 +57,11 @@ class _servieproRegisterState extends State<servieproRegister> {
   double Long = 0;
   late GoogleMapController googleMapController;
   final Mode _mode = Mode.overlay;
-  static const CameraPosition initialCameraPosition = CameraPosition(
-      target: LatLng(27.6720636, 85.3402312), zoom: 100);
-@override
+  static const CameraPosition initialCameraPosition =
+      CameraPosition(target: LatLng(27.6720636, 85.3402312), zoom: 100);
+  @override
   void initState() {
-     _streamList = _referenceList.snapshots();
+    _streamList = _referenceList.snapshots();
     getMarkerData();
     activateListner();
     super.initState();
@@ -79,34 +80,40 @@ class _servieproRegisterState extends State<servieproRegister> {
         icon: BitmapDescriptor.defaultMarker,
         infoWindow: const InfoWindow(
           title: "Update Venue Location",
-        ))
-    );
+        )));
 
     setState(() {});
   }
-  Map<MarkerId, Marker> markerss =<MarkerId,Marker> {};
+
+  Map<MarkerId, Marker> markerss = <MarkerId, Marker>{};
   void initMarker(specify, specifyID) async {
     var markerIdVal = specifyID;
     final MarkerId markerId = MarkerId(markerIdVal);
-    final Marker marker = Marker(markerId: markerId,
+    final Marker marker = Marker(
+        markerId: markerId,
         position: LatLng(specify['Latitude'], specify['Longitude']),
-        infoWindow: InfoWindow(title: specify['Name'],)
-    );
+        infoWindow: InfoWindow(
+          title: specify['Name'],
+        ));
     setState(() {
-      markerss[markerId]=marker;
+      markerss[markerId] = marker;
     });
-
   }
+
   Future getMarkerData() async {
-    FirebaseFirestore.instance.collection("service providers").get().then((value){
-      if(value.docs.isNotEmpty){
-        for(int i=0;i<value.docs.length;i++){
+    FirebaseFirestore.instance
+        .collection("service providers")
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        for (int i = 0; i < value.docs.length; i++) {
           print("PRINTING DATA");
           initMarker(value.docs[i].data(), value.docs[i].id);
         }
       }
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -341,9 +348,9 @@ class _servieproRegisterState extends State<servieproRegister> {
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
-                            setState(() {
-                          dropdownvalue = newValue!;
-                        });
+                          setState(() {
+                            dropdownvalue = newValue!;
+                          });
                         },
                       ),
 
@@ -454,8 +461,9 @@ class _servieproRegisterState extends State<servieproRegister> {
     serviceModel.name = nameEditingController.text;
     serviceModel.phonenum = phonenumEditingController.text;
     serviceModel.Ambnum = ambnumEditingController.text;
-    serviceModel.Longitude=0;
-    serviceModel.Latitude=0;
+    serviceModel.Longitude = 0;
+    serviceModel.Latitude = 0;
+    serviceModel.availability = 'true';
     await firebaseFirestore
         .collection("service providers")
         .doc(serviceuser.uid)
@@ -468,6 +476,7 @@ class _servieproRegisterState extends State<servieproRegister> {
             builder: (context) => VerifyMail(emailEditingController.text)),
         (route) => false);
   }
+
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
     LocationPermission permission;
